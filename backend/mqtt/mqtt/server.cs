@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using MQTTnet;
 using MQTTnet.Server;
@@ -9,7 +8,8 @@ namespace mqtt
 {
     internal class Server
     {
-        public static int MessageCounter = 0;
+        private static int MessageCounter = 0;
+        private static IMqttServer mqttServer;
 
         public static void OnNewConnection(MqttConnectionValidatorContext context)
         {
@@ -25,8 +25,8 @@ namespace mqtt
 
             MessageCounter++;
 
-            Console.WriteLine(
-                $"MessageId: {MessageCounter} - TimeStamp: {DateTime.Now} -- Message: ClientId = {context.ClientId}, Topic = {context.ApplicationMessage?.Topic}, Payload = {payload}, QoS = {context.ApplicationMessage?.QualityOfServiceLevel}, Retain-Flag = {context.ApplicationMessage?.Retain}");
+            Console.WriteLine($"MessageId: {MessageCounter} - TimeStamp: {DateTime.Now} -- Message: ClientId = {context.ClientId}, Topic = {context.ApplicationMessage?.Topic}, Payload = {payload}, QoS = {context.ApplicationMessage?.QualityOfServiceLevel}, Retain-Flag = {context.ApplicationMessage?.Retain}");
+            //mqttServer.PublishAsync("info", "aggiorna");
         }
         static void Main(string[] args)
         {
@@ -35,15 +35,16 @@ namespace mqtt
                                      .WithDefaultEndpoint()
                                      // port used will be 707
                                      .WithDefaultEndpointPort(707)
+                                     .WithClientId("server")
                                      // handler for new connections
                                      .WithConnectionValidator(OnNewConnection)
                                      // handler for new messages
                                      .WithApplicationMessageInterceptor(OnNewMessage);
 
             // creates a new mqtt server     
-            IMqttServer mqttServer = new MqttFactory().CreateMqttServer();
+            mqttServer = new MqttFactory().CreateMqttServer();
 
-            // start the server with options  
+            // start the server with options
             mqttServer.StartAsync(options.Build()).GetAwaiter().GetResult();
 
             // keep application running until user press a key
