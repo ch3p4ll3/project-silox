@@ -1,0 +1,15 @@
+C:\Users\mattia\Documents\dotnet\lezione2\mqtt\mqtt\obj\Debug\mqtt.csproj.AssemblyReference.cache
+C:\Users\mattia\Documents\dotnet\lezione2\mqtt\mqtt\obj\Debug\mqtt.csproj.SuggestedBindingRedirects.cache
+C:\Users\mattia\Documents\dotnet\lezione2\mqtt\mqtt\obj\Debug\mqtt.csproj.CoreCompileInputs.cache
+C:\Users\mattia\Documents\dotnet\lezione2\mqtt\mqtt\bin\Debug\mqtt.exe.config
+C:\Users\mattia\Documents\dotnet\lezione2\mqtt\mqtt\bin\Debug\mqtt.exe
+C:\Users\mattia\Documents\dotnet\lezione2\mqtt\mqtt\bin\Debug\mqtt.pdb
+C:\Users\mattia\Documents\dotnet\lezione2\mqtt\mqtt\bin\Debug\MQTTnet.dll
+C:\Users\mattia\Documents\dotnet\lezione2\mqtt\mqtt\bin\Debug\MQTTnet.Extensions.ManagedClient.dll
+C:\Users\mattia\Documents\dotnet\lezione2\mqtt\mqtt\bin\Debug\Newtonsoft.Json.dll
+C:\Users\mattia\Documents\dotnet\lezione2\mqtt\mqtt\bin\Debug\Serilog.dll
+C:\Users\mattia\Documents\dotnet\lezione2\mqtt\mqtt\bin\Debug\Newtonsoft.Json.xml
+C:\Users\mattia\Documents\dotnet\lezione2\mqtt\mqtt\bin\Debug\Serilog.xml
+C:\Users\mattia\Documents\dotnet\lezione2\mqtt\mqtt\obj\Debug\mqtt.csproj.CopyComplete
+C:\Users\mattia\Documents\dotnet\lezione2\mqtt\mqtt\obj\Debug\mqtt.exe
+C:\Users\mattia\Documents\dotnet\lezione2\mqtt\mqtt\obj\Debug\mqtt.pdb
