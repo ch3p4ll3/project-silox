@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/styleStorico.css">
+    <title>Document</title>
+</head>
+<body>
+    <h1 id="title">Storico movimenti</h1>
+    <div>
+        <button id="indietro" class="shape3D shapeInteractive">Torna al pannello di controllo</button>
+    </div>
+
+    <div id="movimenti">
+        <div id="containerMov" class="shape3D">
+            
+            <form action="">
+                <label for="selectS">Seleziona Silos:</label>
+                <select name="" id="" class="selectSilosStorico transparent" form="formDati" id="selectS">
+                    <option value="S1O">Silos 1 Zona OVEST</option>
+                    <option value="S20">Silos 2 Zona OVEST</option>
+                    <option value="S30">Silos 3 Zona OVEST</option>
+                    <option value="S1E">Silos 1 Zona EST</option>
+                    <option value="S2E">Silos 2 Zona EST</option>
+                    <option value="S3E">Silos 3 Zona EST</option>
+                    <option value="S4E">Silos 4 Zona EST</option>
+                    <option value="tutti">Generale</option>
+                </select>
+
+            </form>
+            <div id="divCheckbox">
+                <form action="action" method="get" name="nomeForm">
+                <label for="tableScorrimentoCheck" id="lbltbl">Tabella a scorrimento</label>
+                <input type="checkbox" name="tableScorrimento" id="tableScorrimentoCheck">
+            </form>
+            </div>
+            <table id="table" class="table shape3D">
+                <tr>
+                    <th id="thLeft">Silos</th>
+                    <th>Liquido</th>
+                    <th>Data</th>
+                    <th>Ora</th>
+                    <th>Azione</th>
+                    <th>Livello (mt)</th>
+                    <th>Volume L</th>
+                    <th id="thRight">Sensori attivi</th>
+                </tr>
+                <tr>
+                    <td>S1O</td>
+                    <td>Vino</td>
+                    <td>07/05/2022</td>
+                    <td>7:58 PM</td>
+                    <td>Pulsante STOP manuale</td>
+                    <td>4,43</td>
+                    <td>4432</td>
+                    <td class="tdRight">4</td>
+                </tr>
+                <tr>
+                    <td>S1O</td>
+                    <td>Vino</td>
+                    <td>06/05/2022</td>
+                    <td>7:02 PM</td>
+                    <td>Sensore raggiunto</td>
+                    <td>4</td>
+                    <td>4000</td>
+                    <td class="tdRight">4</td>
+                </tr>
+                <tr>
+                    <td>S1O</td>
+                    <td>Vino</td>
+                    <td>07/05/2022</td>
+                    <td>6:32 PM</td>
+                    <td>Sensore raggiunto</td>
+                    <td>3</td>
+                    <td>3000</td>
+                    <td class="tdRight">3</td>
+                </tr>
+                <tr>
+                    <td>S1O</td>
+                    <td>Vino</td>
+                    <td>06/05/2022</td>
+                    <td>6:02 PM</td>
+                    <td>Sensore raggiunto</td>
+                    <td>2</td>
+                    <td>2000</td>
+                    <td class="tdRight">2</td>
+                </tr>
+                <tr>
+                    <td>S1O</td>
+                    <td>Vino</td>
+                    <td>06/05/2022</td>
+                    <td>5:32 PM</td>
+                    <td>Saracinesca aperta</td>
+                    <td>1</td>
+                    <td>1000</td>
+                    <td class="tdRight">1</td>
+                </tr>
+                <tr>
+                    <td>S1O</td>
+                    <td>Vino</td>
+                    <td>06/05/2022</td>
+                    <td>5:32 PM</td>
+                    <td>Allarme low</td>
+                    <td>1</td>
+                    <td>1000</td>
+                    <td class="tdRight">1</td>
+                </tr>
+                <tr>
+                    <td>S1O</td>
+                    <td>Vino</td>
+                    <td>06/05/2022</td>
+                    <td>5:32 PM</td>
+                    <td>Sensore raggiunto</td>
+                    <td>1</td>
+                    <td>1000</td>
+                    <td class="tdRight">1</td>
+                </tr>
+                <tr>
+                    <td>S1O</td>
+                    <td>Vino</td>
+                    <td>06/05/2022</td>
+                    <td>3:24 PM</td>
+                    <td>Sensore raggiunto</td>
+                    <td>2</td>
+                    <td>2000</td>
+                    <td class="tdRight">2</td>
+                </tr>
+
+
+                <tr>
+                    <td>S1O</td>
+                    <td>Vino</td>
+                    <td>06/05/2022</td>
+                    <td>5:32 PM</td>
+                    <td>Sensore raggiunto</td>
+                    <td>1</td>
+                    <td>1000</td>
+                    <td class="tdRight">1</td>
+                </tr>
+                <tr>
+                    <td>S1O</td>
+                    <td>Vino</td>
+                    <td>06/05/2022</td>
+                    <td>3:24 PM</td>
+                    <td>Sensore raggiunto</td>
+                    <td>2</td>
+                    <td>2000</td>
+                    <td class="tdRight">2</td>
+                </tr><tr>
+                    <td>S1O</td>
+                    <td>Vino</td>
+                    <td>06/05/2022</td>
+                    <td>5:32 PM</td>
+                    <td>Sensore raggiunto</td>
+                    <td>1</td>
+                    <td>1000</td>
+                    <td class="tdRight">1</td>
+                </tr>
+                <tr>
+                    <td>S1O</td>
+                    <td>Vino</td>
+                    <td>06/05/2022</td>
+                    <td>3:24 PM</td>
+                    <td>Sensore raggiunto</td>
+                    <td>2</td>
+                    <td>2000</td>
+                    <td class="tdRight">2</td>
+                </tr><tr>
+                    <td>S1O</td>
+                    <td>Vino</td>
+                    <td>06/05/2022</td>
+                    <td>5:32 PM</td>
+                    <td>Sensore raggiunto</td>
+                    <td>1</td>
+                    <td>1000</td>
+                    <td class="tdRight">1</td>
+                </tr>
+                <tr>
+                    <td>S1O</td>
+                    <td>Vino</td>
+                    <td>06/05/2022</td>
+                    <td>3:24 PM</td>
+                    <td>Sensore raggiunto</td>
+                    <td>2</td>
+                    <td>2000</td>
+                    <td class="tdRight">2</td>
+                </tr>
+
+                
+            </table>
+            
+        </div>
+    </div>
+    
+
+    <script src="/js/storicoJs.js"></script>
+</body>
+</html>

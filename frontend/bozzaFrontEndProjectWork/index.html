@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <title>Prova 2</title>
+</head>
+<body>
+    <h1 id="title">Pannello di controllo</h1>
+
+    <div id="bigDivUno">
+        <div id="activeZone" class="shape3D">
+            <div id="activeImg" class="shape3D">
+                <img src="/img/tankLvl.png" height="85%" alt="" srcset="">
+            </div>
+            <div id="activeDati" class="shape3D">
+                
+                <form id="formDati">
+
+                    <select name="" id="" class="selectSilos transparent" form="formDati">
+                        <option value="S1O">Silos 1 Zona OVEST</option>
+                                <option value="S20">Silos 2 Zona OVEST</option>
+                                <option value="S30">Silos 3 Zona OVEST</option>
+                                <option value="S1E">Silos 1 Zona EST</option>
+                                <option value="S2E">Silos 2 Zona EST</option>
+                                <option value="S3E">Silos 3 Zona EST</option>
+                                <option value="S4E">Silos 4 Zona EST</option>
+                    </select>
+                <!-- <button id="dettagli">Dettagli</button>     -->
+                <label for="lvlSilos">Livello silos: [7m (70%)]</label>
+                <input type="text" id="lvlSilos" name="lvlSilos"><br>
+                <label for="liquidoSilos">Liquido contenuto: [vino]</label>
+                <input type="text" id="liquidoSilos" name="liquidoSilos"><br>
+                <label for="volumeSilos">Volume occupato: [8l]</label>
+                <input type="text" id="vlmSilos" name="vlmSilos"><br>
+                <label for="latestCharge">Ultima ricarica: [05/05/21 2l]</label>
+                <input type="text" id="latestCharge" name="latestCharge"><br>
+                <label for="latestEmpty">Ultimo scarico: [04/05/21 1.33l]</label>
+                <input type="text" id="latestEmpty" name="latestEmpty"><br>
+
+
+
+                <label for="latestEmpty">Ultimo scarico: [04/05/21 1.33l]</label>
+                <input type="text" id="latestEmpty" name="latestEmpty"><br>
+                <label for="latestEmpty">Ultimo scarico: [04/05/21 1.33l]</label>
+                <input type="text" id="latestEmpty" name="latestEmpty"><br>
+                <label for="latestEmpty">Ultimo scarico: [04/05/21 1.33l]</label>
+                <input type="text" id="latestEmpty" name="latestEmpty"><br>
+                <label for="latestEmpty">Ultimo scarico: [04/05/21 1.33l]</label>
+                <input type="text" id="latestEmpty" name="latestEmpty"><br>
+                <label for="latestEmpty">Ultimo scarico: [04/05/21 1.33l]</label>
+                <input type="text" id="latestEmpty" name="latestEmpty"><br>
+                <label for="latestEmpty">Ultimo scarico: [04/05/21 1.33l]</label>
+                <input type="text" id="latestEmpty" name="latestEmpty"><br>
+              </form>
+            </div>
+            <div id="activeButtons">
+                <div id="buttonsUtil" class="btnPositions shape3D">
+                    <button id="btnRiempi" class="btn shape3D shapeInteractive">RIEMPI</button>
+                    <button id="btnSvuota" class="btn shape3D shapeInteractive">SVUOTA</button>
+                    <button id="btnStop" class="btn shape3D shapeInteractive">STOP</button>
+                </div>
+                <button id="buttonImpostazioni" class="btnPositions shape3D shapeInteractive">
+                    IMPOSTAZIONI
+                </button>
+                <button id="dettagli" class="btnPositions shape3D shapeInteractive">
+                    STORICO MOVIMENTI
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="bigDivDue">
+        <div id="zona1" class="zona shape3D">
+                <h2 id="zona1name" class="zonaName">Zona OVEST</h2>
+            <div class="silosZone shape3D">
+                <div id="silos1" class="silos shape3D shapeInteractive">
+                    <span>1</span>
+                    <img src="/img/topBattery.png" alt="" srcset="" class="iconsBSilos">
+                </div>
+                <div id="silos2" class="silos shape3D shapeInteractive">
+                    <span>2</span>
+                    <img src="/img/topBattery.png" alt="" srcset="" class="iconsBSilos">
+                </div>
+                <div id="silos3" class="silos shape3D shapeInteractive">
+                    <span>3</span>
+                    <img src="/img/okBattery.png" alt="" srcset="" class="iconsBSilos">
+                </div>
+                <div id="addSilos1" class="silos shape3D shapeInteractive">
+                    <span>+</span>
+                </div>
+            </div>
+        </div>
+        <div id="zona2" class="zona shape3D" class="silos">
+            <h2 id="zona2name" class="zonaName">Zona EST</h2>
+            <div class="silosZone shape3D">
+                <div id="silos4" class="silos shape3D shapeInteractive">
+                    <span>1</span>
+                    <img src="/img/topBattery.png" alt="" srcset="" class="iconsBSilos">
+                </div>
+                <div id="silos5" class="silos shape3D shapeInteractive">
+                    <span>2</span>
+                    <img src="/img/fullCBattery.png" alt="" srcset="" class="iconsBSilos">
+                </div>
+                <div id="silos6" class="silos shape3D shapeInteractive">
+                    <span>3</span>
+                    <img src="/img/topBattery.png" alt="" srcset="" class="iconsBSilos">
+                </div>
+                <div id="silos7" class="silos shape3D shapeInteractive">
+                    <span>4</span>
+                    <img src="/img/errorBattery.png" alt="" srcset="" class="iconsBSilos">
+                </div>
+                <div id="addSilos2" class="silos shape3D shapeInteractive">
+                    <span>+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="updateIcon">
+        <img src="/img/refresh_79905.png" width="40px" alt="" srcset="">
+    </div>
+    
+
+
+
+
+
+    <script src="/js/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,279 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+body{
+    background-color: transparent;
+    overflow-x: hidden;
+    background-color: #333;
+    color: #eee;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.transparent{
+    background-color: transparent;
+}
+
+button{
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* 3D */
+
+.shape3D{
+    
+    background: #333;
+    margin: 10px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: -5px -5px 15px #444, 5px 5px 15px #222, inset 5px 5px 10px #444, inset -5px -5px 10px #222;
+
+    color: #eee;
+    font-size: 17px;
+}
+
+.shapeInteractive:hover{
+    font-size: 16px;
+    transition: 400ms;
+    box-shadow: -5px -5px 15px #444, 5px 5px 15px #222, inset 5px 5px 10px #222, inset -5px -5px 10px #444;
+
+}
+
+.shapeInteractive:active{
+    font-size: x-large;
+}
+
+/* TITOLO */
+#title{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin: 2vh;
+}
+
+/* DIV GRANDE UNO */
+#bigDivUno{
+    width: auto;
+    height: 50vh;
+    justify-content: center;
+    display: flex;
+    margin-left: 10vh;
+    margin-right: 10vh;
+    margin-bottom: 5vh;
+}
+
+/* DIV AREA ACTIVE */
+#activeZone{
+    position: relative;
+    display: inline-flex;
+    width: 90%;
+    padding: 4vh;
+    flex-wrap: wrap;
+}
+
+/* DIV IMMAGINE */
+#activeImg{
+    position: relative;
+    display: flex;
+    height: 90%;
+    width: 27%;
+    float: left;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    padding: 1vh;
+    }
+
+/* DIV FORM */
+
+#activeDati{
+    position: relative;
+    display: flex;
+    height: 90%;
+    width: 29%;
+    float: left;
+    overflow-y: scroll;
+    padding: 1vh;
+}
+
+/* Selettore silos */
+.selectSilos{
+    height: 5vh;
+    border: none;
+    display: flex;
+    width: auto;
+    font-size: large;
+    border: 0;
+    color: #ddd;
+    margin-top: -1vh;
+}
+
+.selectSilos:focus{
+    outline: none;
+}
+.selectSilos:hover{
+    cursor: pointer;
+}
+
+
+/* form */
+
+#formDati{
+    position: relative;
+    padding: 2vh;
+}
+
+input[type=text] {
+    border: 0;
+    width: auto;
+}
+
+input[type=text] {
+    width: 3vh;
+    padding: 6px 10px;
+    display: inline-flex;
+    justify-content: flex-end;
+    border: 0;
+    margin-top: 2vh;
+    background-color: transparent;
+  }
+
+  input[type=text]:focus{
+      outline: none;
+  }
+
+
+
+/* DIV BUTTONS */
+#activeButtons{
+    position: relative;
+    display: flex;
+    height: 100%;
+    width: 37%;
+    float: left;
+    flex-direction: column;
+}
+.btnPositions{
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+/* DIV BUTTONS UTILS */
+#buttonsUtil{
+    height: 55%;
+}
+
+.btn{
+    height: 100px;
+    width: 100px;
+}
+
+#btnStop{
+    background-color: red;
+}
+#btnRiempi{
+    background-color: #304432;
+}
+
+/* DIV BUTTON IMPOSTAZIONI */
+#buttonImpostazioni{
+    height: 22%;
+}
+/* DIV PHRASE */
+#dettagli{
+    height: 20%;
+}
+
+/* DIV GRANDE DUE */
+
+#bigDivDue{
+    position: relative;
+    width: auto;
+    height: auto;
+    min-height: 25vh;
+    justify-content: space-around;
+    display: flex;
+    margin-left: 10vh;
+    margin-right: 10vh;
+    margin-top: 1vh;
+}
+
+/* ZONE e SILOS generali*/
+
+.zona{
+    display: inline-flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    width: 40%;
+    height: auto;
+    min-height: 30vh;
+}
+
+.zonaName {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 3vh;
+    margin-bottom: 1vh;
+}
+
+.iconsBSilos{
+    width: 20px;;
+}
+
+.silos{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 2vh;
+}
+.silosZone{
+    position: relative;
+    display: flex;
+    width: 80%;
+    height: 60%;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+
+/* DIV ZONA 1 */
+
+
+
+/* DIV ZONA 2 */
+
+
+
+
+/* REFRESH */
+
+#updateIcon{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    position: absolute;
+    top: 80vh;
+}
+
+
+
+
+/* 
+#dettagli{
+    display: block;
+    background-color: transparent;
+    text-decoration: underline;
+    border: 0;
+    color: #ccc;
+}
+#dettagli:hover{
+    cursor: pointer;
+} */

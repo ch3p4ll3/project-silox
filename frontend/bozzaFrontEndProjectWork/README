@@ -1,0 +1,36 @@
+////////// INFO //////////
+
+//index.html
+Contiene la pagina html principale
+
+//pages
+Contiene le altre pagine html
+
+//js
+Contiene gli script javascript di tutte le pagine
+
+//css
+Contiene i fogli di stile di tutte le pagine
+
+//img
+Contiene immagini e gif necessarie alle pagine
+
+
+
+////////// Commenti //////////
+
+Tutte le pagine sono in costruzione ma di per se il frontend è quasi pronto, le imperfezioni di stile e eventuali modifiche le posso fare tranquillamente in corso d'opera e a seconda delle richieste.
+
+Ho messo degli elementi di esempio che però non ci saranno nella versione finale perchè saranno funzioni js a crearli.
+
+////////// To do //////////
+
+- testare connessione al database
+- creare funzioni js per la visualizzazione del silos selezionato
+- creare funzioni js che creino gli elementi html necessari a seconda dei dati ricevuti dal database quali:
+  immagine livello silos,
+  form dati, 
+  tabella dettagli
+- creare funzioni per i pulsanti di carico, scarico, e stop
+- (+ creare funzioni per l'aggiunta di nuovi silos e zone)
+- (+ sistemare css per visualizzazione su mobile)
