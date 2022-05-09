@@ -1,7 +1,7 @@
 const aedes = require('aedes')();
 const server = require('net').createServer(aedes.handle);
+const db = require("./database");
 const port = 1883;
-
 
 // emitted when a client connects to the broker
 aedes.on('client', function (client) {
@@ -28,11 +28,9 @@ aedes.on('publish', async function (packet, client) {
     if (client) {
         console.log(`[MESSAGE_PUBLISHED] Client ${(client ? client.id : 'BROKER_' + aedes.id)} has published message on ${packet.topic} to broker ${aedes.id}`)
         console.log(packet.payload.toString());
+
+        aedes.publish({topic: 'info', payload: 'ergaerg'});
     }
 })
 
-server.listen(port, function () {
-    console.log(`MQTT Broker running on port: ${port}`);
-});
-
-//module.exports = {server};
+module.exports = {aedes, server, port};
