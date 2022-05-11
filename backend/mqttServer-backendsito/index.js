@@ -23,8 +23,8 @@ app.get('/zone', async (req, res) => {
 });
 
 app.get('/zona/:idZona', async (req, res) => {
-    db.getMeasurment("silos1", res)
-    /*let text = 'SELECT idsilo, diametro, liquido.nome, densita, sensoritotali, sensoriattivi, umidità, temperatura, altezza, data FROM zona INNER JOIN silo ON id_zona = idZona INNER JOIN liquido ON id_liquido = idliquido WHERE idZona= $1';
+    /*
+    let text = 'SELECT idsilo, diametro, liquido.nome, densita, sensoritotali, sensoriattivi, umidità, temperatura, altezza, data FROM zona INNER JOIN silo ON id_zona = idZona INNER JOIN liquido ON id_liquido = idliquido WHERE idZona= $1';
     let values = [req.params.idZona];
     let { rows } = await db.query(text, values);
 
@@ -38,11 +38,12 @@ app.get('/zona/:idZona', async (req, res) => {
         element['peso'] = element['volume']*element['densita'];
     });
 
+    db.getZoneMeasurements(req.params.idZona, rows, res)
     res.json(rows);*/
 });
 
 app.get('/zona/:idZona/silos/:idSilos', async (req, res) => {
-    let text = 'SELECT idsilo, diametro, liquido.nome, densita, sensoritotali, sensoriattivi, umidità, temperatura, altezza, data FROM zona INNER JOIN silo ON id_zona = idZona INNER JOIN liquido ON id_liquido = idliquido WHERE idZona= $1 AND idsilo= $2';
+    let text = 'SELECT idsilo, diametro, liquido.nome, densita, sensoritotali, sensoriattivi, umidità, temperatura, altezza, data FROM zona INNER JOIN silo ON id_zona = idZona INNER JOIN liquido ON id_liquido = idliquido WHERE idZona= $1 AND idsilo = $2';
     let values = [req.params.idZona, req.params.idSilos];
     let { rows } = await db.query(text, values);
 
@@ -56,7 +57,7 @@ app.get('/zona/:idZona/silos/:idSilos', async (req, res) => {
         element['peso'] = element['volume']*element['densita'];
     });
 
-    res.json(rows);
+    db.getSilosMeasurements(req.params.idZona, req.params.idSilos, rows, res)
 });
 
 app.post('/aggiungiLiquido', (req, res) => {

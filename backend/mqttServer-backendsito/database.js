@@ -1,7 +1,14 @@
-/*const { Client } = require('pg');
+const { Client } = require('pg');
+const token="9fxmHGECaPlFDvh1Eji-NClgUcUthQp4jPOFmYHrv5dQDBWhYbnhXk63xSZ7Ce2zFqiy_43rGXtixFkqBoBMOA==";
+const {InfluxDB, Point} = require('@influxdata/influxdb-client')
+
+const url = 'https://eu-central-1-1.aws.cloud2.influxdata.com'
+const client = new InfluxDB({url, token})
+let org = `mattia.vidoni@stud.itsaltoadriatico.it`
+let bucket = `silos`
 
 
-let client = new Client({
+let pgClient = new Client({
     user: 'amministratore',
     host: 'dbsilos.c9nj1x2p6gk5.eu-west-1.rds.amazonaws.com',
     database: 'postgres',
@@ -10,28 +17,15 @@ let client = new Client({
 });
 
 
-client.connect();*/ 
-
-const token="9fxmHGECaPlFDvh1Eji-NClgUcUthQp4jPOFmYHrv5dQDBWhYbnhXk63xSZ7Ce2zFqiy_43rGXtixFkqBoBMOA==";
-
-const {InfluxDB, Point, FluxTableMetaData} = require('@influxdata/influxdb-client')
-
-const url = 'https://eu-central-1-1.aws.cloud2.influxdata.com'
-
-const client = new InfluxDB({url, token})
-
-
-
-let org = `mattia.vidoni@stud.itsaltoadriatico.it`
-let bucket = `silos`
+pgClient.connect();
 
 const writeClient = client.getWriteApi(org, bucket, 'ns')
 const queryApi = client.getQueryApi(org)
 
 
-function addMeasurement(idSilos, ph, tempInt, tempEst, umiditaInt, umiditaEst, pressioneInt, volume){
+function addMeasurement(idZona, idSilos, ph, tempInt, tempEst, umiditaInt, umiditaEst, pressioneInt, volume){
     let point = new Point(idSilos)
-    .tag('tagname1', 'tagvalue1')
+    .tag('zona', idZona)
     .floatField('ph', ph)
     .floatField('tempInt', tempInt)
     .floatField('tempEst', tempEst)
@@ -46,27 +40,32 @@ function addMeasurement(idSilos, ph, tempInt, tempEst, umiditaInt, umiditaEst, p
     writeClient.flush()
 }
 
-function getMeasurment(idSilos, res){
+
+function orderDict(dict, o, last_table){
+    if (o.table != last_table){
+        last_table = o.table;
+    }
+
+    if (dict[o._time] == null){
+        dict[o._time] = {"silos": o._measurement};
+    }
+    dict[o._time][o._field] = o._value;
+}
+
+
+async function getSilosMeasurements(idZona, idSilos, silosInfo, res){
     let last_table = -1;
-    let dict = {}
+    let dict = {};
     let fluxQuery = `from(bucket: "silos")
-    |> range(start: -20h)
-    |> filter(fn: (r) => r._measurement == "${idSilos}")`;
+    |> range(start: -42h)
+    |> filter(fn: (r) => r._measurement == ${idSilos})`;
 
 
     queryApi.queryRows(fluxQuery, {
         next: (row, tableMeta) => {
             // the following line creates an object for each row
             const o = tableMeta.toObject(row);
-
-            if (o.table != last_table){
-                last_table = o.table;
-            }
-
-            if (dict[o._time] == null){
-                dict[o._time] = {"silos": o._measurement};
-            }
-            dict[o._time][o._field] = o._value;
+            orderDict(dict, o, last_table);
         },
         error: (error) => {
           console.error(error)
@@ -74,26 +73,27 @@ function getMeasurment(idSilos, res){
           res.error(403).send("errore");
         },
         complete: () => {
-          console.log('\nFinished SUCCESS')
-          console.log(dict);
-          //res.json(ser);
+            console.log('\nFinished SUCCESS')
+            let rtn = {"measurements": []};
+
+            for (const [key, value] of Object.entries(dict)) {
+                console.log(key);
+                rtn['measurements'].push({key : value});
+            };
+            rtn['silosInfo'] = silosInfo;
+            console.log(rtn);
+            res.json(rtn);
         },
       })
 }
 
 
 module.exports = {
-    getMeasurment, addMeasurement
+    getSilosMeasurements, addMeasurement, query: (text, params) => pgClient.query(text, params)
 }
 //addMeasurement("silos1", 256, 23, 24, 25, 2, 2, 23);
 
-getMeasurment("silos1", null)
-//addMeasurement("silos1", 2, 23, 2, 2, 2, 25, 24);
+//getSilosMeasurements("silos1", 1, null)
+//addMeasurement(1, 1, 2, 23, 2, 2, 2, 25, 24);
 
 //console.log(getMeasurment("silos1"));
-
-/*
-
-module.exports = {
-    query: (text, params) => client.query(text, params),
-  }*/
