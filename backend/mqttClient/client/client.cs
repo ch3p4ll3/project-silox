@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using client;
 using MQTTnet;
 using MQTTnet.Client.Connecting;
 using MQTTnet.Client.Disconnecting;
@@ -9,7 +11,6 @@ using MQTTnet.Client.Options;
 using MQTTnet.Extensions.ManagedClient;
 using Newtonsoft.Json;
 using Serilog;
-using Spectre.Console;
 
 
 namespace mqtt
@@ -21,13 +22,8 @@ namespace mqtt
         private const string ServerIp = "localhost";
         private static IManagedMqttClient _mqttClient;
         private const int retryTimeout = 10;
+        static Dictionary<string, string> openWith = new Dictionary<string, string>();
 
-        // silos & zone id
-        private static string silosId = "silosId";
-
-        // info silos
-        private static int livello = 0;
-        private static int livelloMax = 8;
         public static void OnConnected(MqttClientConnectedEventArgs obj)
         {
             Log.Logger.Information("Successfully connected.");
@@ -45,77 +41,34 @@ namespace mqtt
 
         public static void OnMessage(MqttApplicationMessageReceivedEventArgs e)
         {
-            Console.WriteLine($"+ Payload = {Encoding.UTF8.GetString(e.ApplicationMessage.Payload)}");
+            Console.WriteLine(Encoding.UTF8.GetString(e.ApplicationMessage.Payload));
         }
 
         static void Main(string[] args)
         {
             connect();
-            bool run = true;
-            while (true) {
-                silosId = getSilos();
 
-                while (run)
-                {
-                    var azione = AnsiConsole.Prompt(
-                        new SelectionPrompt<string>()
-                            .Title("Cosa vuoi fare?")
-                            .PageSize(10)
-                            .AddChoices(new[] {
-                            "Riempi", "Scarica", "indietro",
-                    }));
-
-                    switch (azione)
-                    {
-                        case "indietro":
-                            run = false;
-                            break;
-
-                        case "Riempi":
-                            if (livello < livelloMax)
-                                sendMsg(++livello);
-                            break;
-
-                        case "Scarica":
-                            if (livello > 0)
-                                sendMsg(--livello);
-                            break;
-                    }
-                }
-                run = true;
+            while(true)
+            {
+                Misurazioni measur = getRandomMeasurement();
+                sendMsg($"zona-{measur.idZona}/silos-{measur.idSilos}", measur);
+                Thread.Sleep(5000);
             }
         }
 
-        private static void sendMsg(int sensoriAttivi)
+        private static void sendMsg(string location, Misurazioni misurazione)
         {
             //crea json da inviare
-            string json = JsonConvert.SerializeObject(new { message = sensoriAttivi, sent = DateTimeOffset.UtcNow });
+            string json = JsonConvert.SerializeObject(misurazione);
 
-            _mqttClient.PublishAsync(silosId, json);
-        }
+            Console.WriteLine(json);
 
-        // prendi silos da db per selezionarlo 
-        private static string getSilos()
-        {
-            var silos = AnsiConsole.Prompt(
-                        new SelectionPrompt<string>()
-                            .Title("Seleziona Silos")
-                            .PageSize(10)
-                            .AddChoices(new[] {
-                            "Idzona1/idSilos1", "Idzona1/idSilos2", "esci",
-                    }));
-
-            if (silos == "esci")
-            {
-                System.Environment.Exit(0);
-            }
-            return silos;
+            _mqttClient.PublishAsync(location, json).Wait();
         }
 
         //dopo aver selezionato il nuovo silos aggiorna le info per mqtt e aggiorna lo stato attuale
         public static void connect()
         {
-            livello = 0;
             // Creates a new client
             MqttClientOptionsBuilder builder = new MqttClientOptionsBuilder()
                                                 .WithClientId("mqttClient#1")   
@@ -139,6 +92,49 @@ namespace mqtt
 
             // Starts a connection with the Broker
             _mqttClient.StartAsync(options).GetAwaiter().GetResult();
+        }
+
+        public static void disconnect()
+        {
+            _mqttClient.StopAsync();
+            _mqttClient.Dispose();
+        }
+
+        public static Misurazioni getRandomMeasurement()
+        {
+            Random rnd = new Random();
+            int idSilos = rnd.Next(1, 7);
+            int idZona = rnd.Next(1, 3);
+
+            Misurazioni misurazioni = new Misurazioni()
+            {
+                idSilos = idSilos,
+                idZona = idZona,
+                token = "24705669ef817555487499e723bb00c11656eec404fcd264c899af337d813bfaea5975ef6544214381c61ccdf49dde61984b2bb3b1c1595b9010906011be6cbc",
+                ph = rnd.Next(0, 13),
+                tempInt = Math.Round(rnd.NextDouble(20.0, 35.0), 2),
+                tempEst = Math.Round(rnd.NextDouble(-10.0, 40.0), 2),
+                umiditaInt = Math.Round(rnd.NextDouble(0, 100), 2),
+                umiditaEst = Math.Round(rnd.NextDouble(0, 100), 2),
+                pressioneInt = Math.Round(rnd.NextDouble(0, 3), 2),
+                livelloSensore1 = Math.Round(rnd.NextDouble(0, 8), 2),
+                livelloSensore2 = Math.Round(rnd.NextDouble(0, 8), 2),
+                livelloSensore3 = Math.Round(rnd.NextDouble(0, 8), 2),
+                oraInvio = DateTime.Now
+            };
+
+            return misurazioni;
+        }
+    }
+
+    public static class RandomExtensions
+    {
+        public static double NextDouble(
+            this Random random,
+            double minValue,
+            double maxValue)
+        {
+            return random.NextDouble() * (maxValue - minValue) + minValue;
         }
     }
 }

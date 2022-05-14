@@ -8,6 +8,7 @@ let org = `mattia.vidoni@stud.itsaltoadriatico.it`
 let bucket = `silos`
 
 
+// client per DB postgres
 let pgClient = new Client({
     user: 'amministratore',
     host: 'dbsilos.c9nj1x2p6gk5.eu-west-1.rds.amazonaws.com',
@@ -23,6 +24,7 @@ const writeClient = client.getWriteApi(org, bucket, 'ns')
 const queryApi = client.getQueryApi(org)
 
 
+//metodo per aggiungere su influx le misurazioni
 function addMeasurement(idZona, idSilos, ph, tempInt, tempEst, umiditaInt, umiditaEst, pressioneInt, volume){
     let point = new Point(idSilos)
     .tag('zona', idZona)
@@ -41,24 +43,57 @@ function addMeasurement(idZona, idSilos, ph, tempInt, tempEst, umiditaInt, umidi
 }
 
 
+//funzione per ordinare le query prese da influx
 function orderDict(dict, o, last_table){
     if (o.table != last_table){
         last_table = o.table;
     }
 
     if (dict[o._time] == null){
-        dict[o._time] = {"silos": o._measurement};
+        dict[o._time] = {};
     }
     dict[o._time][o._field] = o._value;
 }
 
 
-async function getSilosMeasurements(idZona, idSilos, silosInfo, res){
+//prendi l'ultima misurazione di un silos
+function getLastSilosMeasurements(idSilos, silosInfo, res){
     let last_table = -1;
     let dict = {};
     let fluxQuery = `from(bucket: "silos")
     |> range(start: -42h)
-    |> filter(fn: (r) => r._measurement == ${idSilos})`;
+    |> filter(fn: (r) => r._measurement == "${idSilos}")
+    |> last(column: "_time")`;
+
+
+    queryApi.queryRows(fluxQuery, {
+        next: (row, tableMeta) => {
+            // the following line creates an object for each row
+            const o = tableMeta.toObject(row);
+            orderDict(dict, o, last_table);
+        },
+        error: (error) => {
+          console.error(error)
+          console.log('\nFinished ERROR')
+          res.error(403).send("errore");
+        },
+        complete: () => {
+            console.log('\nFinished SUCCESS')
+            let rtn = {"lastMeasurement": dict};
+            rtn['silosInfo'] = silosInfo;
+            res.json(rtn);
+        },
+      })
+}
+
+
+//prendi tutte le misurazioni delle ultime 12h
+function getAllSilosMeasurements(idSilos, silosInfo, res){
+    let last_table = -1;
+    let dict = {};
+    let fluxQuery = `from(bucket: "silos")
+    |> range(start: -12h)
+    |> filter(fn: (r) => r._measurement == "${idSilos}")`;
 
 
     queryApi.queryRows(fluxQuery, {
@@ -77,11 +112,9 @@ async function getSilosMeasurements(idZona, idSilos, silosInfo, res){
             let rtn = {"measurements": []};
 
             for (const [key, value] of Object.entries(dict)) {
-                console.log(key);
-                rtn['measurements'].push({key : value});
+                rtn['measurements'].push({[key] : value});
             };
             rtn['silosInfo'] = silosInfo;
-            console.log(rtn);
             res.json(rtn);
         },
       })
@@ -89,11 +122,6 @@ async function getSilosMeasurements(idZona, idSilos, silosInfo, res){
 
 
 module.exports = {
-    getSilosMeasurements, addMeasurement, query: (text, params) => pgClient.query(text, params)
+    getAllSilosMeasurements, getLastSilosMeasurements, 
+    addMeasurement, query: (text, params) => pgClient.query(text, params)
 }
-//addMeasurement("silos1", 256, 23, 24, 25, 2, 2, 23);
-
-//getSilosMeasurements("silos1", 1, null)
-//addMeasurement(1, 1, 2, 23, 2, 2, 2, 25, 24);
-
-//console.log(getMeasurment("silos1"));
