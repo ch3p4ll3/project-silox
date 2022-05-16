@@ -44,14 +44,6 @@ app.get('/silos/:idSilos/last', async (req, res) => {
     let values = [req.params.idSilos];
     let { rows } = await db.query(text, values);
 
-    rows.forEach(element => {
-        if (element['sensoriattivi'] == null){
-            element['sensoriattivi'] = 0;
-        }
-
-        element['peso'] = element['volume']*element['densita'];
-    });
-
     db.getLastSilosMeasurements(req.params.idSilos, rows, res)
 });
 
@@ -61,14 +53,6 @@ app.get('/silos/:idSilos/all', async (req, res) => {
     let text = 'SELECT id_Zona, idsilo, diametro, liquido.nome AS liquido, densita, altezza FROM silo INNER JOIN liquido ON id_liquido = idliquido WHERE idsilo = $1';
     let values = [req.params.idSilos];
     let { rows } = await db.query(text, values);
-
-    rows.forEach(element => {
-        if (element['sensoriattivi'] == null){
-            element['sensoriattivi'] = 0;
-        }
-
-        element['peso'] = element['volume']*element['densita'];
-    });
 
     db.getAllSilosMeasurements(req.params.idSilos, rows, res)
 });

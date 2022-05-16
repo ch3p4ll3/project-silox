@@ -25,16 +25,24 @@ const queryApi = client.getQueryApi(org)
 
 
 //metodo per aggiungere su influx le misurazioni
-function addMeasurement(idZona, idSilos, ph, tempInt, tempEst, umiditaInt, umiditaEst, pressioneInt, volume){
+function addMeasurement(idZona, idSilos, ph, tempInt, tempEst, umiditaInt, 
+    umiditaEst, pressioneInt, altezza, densitaLiquido, nomeLiquido, diametro){
+
+        console.log(diametro)
+    let volume = Math.PI*Math.pow(diametro/2, 2)*altezza;
     let point = new Point(idSilos)
     .tag('zona', idZona)
+    .tag('liquido', nomeLiquido)
     .floatField('ph', ph)
     .floatField('tempInt', tempInt)
     .floatField('tempEst', tempEst)
     .floatField('umiditaInt', umiditaInt)
     .floatField('umiditaEst', umiditaEst)
     .floatField('pressioneInt', pressioneInt)
+    .floatField('altezza', altezza)
     .floatField('volume', volume)
+    .floatField("densitaLiquido", densitaLiquido)
+    .floatField("peso", volume*densitaLiquido)
 
     console.log(point);
 
@@ -50,7 +58,7 @@ function orderDict(dict, o, last_table){
     }
 
     if (dict[o._time] == null){
-        dict[o._time] = {};
+        dict[o._time] = {"time": o._time};
     }
     dict[o._time][o._field] = o._value;
 }
@@ -61,9 +69,9 @@ function getLastSilosMeasurements(idSilos, silosInfo, res){
     let last_table = -1;
     let dict = {};
     let fluxQuery = `from(bucket: "silos")
-    |> range(start: -42h)
+    |> range(start: -12h)
     |> filter(fn: (r) => r._measurement == "${idSilos}")
-    |> last(column: "_time")`;
+    |> last()`;
 
 
     queryApi.queryRows(fluxQuery, {
@@ -79,8 +87,12 @@ function getLastSilosMeasurements(idSilos, silosInfo, res){
         },
         complete: () => {
             console.log('\nFinished SUCCESS')
-            let rtn = {"lastMeasurement": dict};
-            rtn['silosInfo'] = silosInfo;
+            let rtn = {"measurements": []};
+            console.log(dict[Object.keys(dict)[0]]['volume'])
+            for (const [key, value] of Object.entries(dict)) {
+                rtn['measurements'].push(value);
+            };
+            rtn['silosInfo'] = silosInfo[0];
             res.json(rtn);
         },
       })
@@ -112,7 +124,7 @@ function getAllSilosMeasurements(idSilos, silosInfo, res){
             let rtn = {"measurements": []};
 
             for (const [key, value] of Object.entries(dict)) {
-                rtn['measurements'].push({[key] : value});
+                rtn['measurements'].push(value);
             };
             rtn['silosInfo'] = silosInfo;
             res.json(rtn);

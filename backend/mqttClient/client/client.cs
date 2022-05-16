@@ -51,7 +51,7 @@ namespace mqtt
             while(true)
             {
                 Misurazioni measur = getRandomMeasurement();
-                sendMsg($"zona-{measur.idZona}/silos-{measur.idSilos}", measur);
+                sendMsg($"silos-{measur.idSilos}", measur);
                 Thread.Sleep(5000);
             }
         }
@@ -103,14 +103,10 @@ namespace mqtt
         public static Misurazioni getRandomMeasurement()
         {
             Random rnd = new Random();
-            int idSilos = rnd.Next(1, 7);
-            int idZona = rnd.Next(1, 3);
 
             Misurazioni misurazioni = new Misurazioni()
             {
-                idSilos = idSilos,
-                idZona = idZona,
-                token = "24705669ef817555487499e723bb00c11656eec404fcd264c899af337d813bfaea5975ef6544214381c61ccdf49dde61984b2bb3b1c1595b9010906011be6cbc",
+                idSilos = rnd.Next(1, 3),
                 ph = rnd.Next(0, 13),
                 tempInt = Math.Round(rnd.NextDouble(20.0, 35.0), 2),
                 tempEst = Math.Round(rnd.NextDouble(-10.0, 40.0), 2),

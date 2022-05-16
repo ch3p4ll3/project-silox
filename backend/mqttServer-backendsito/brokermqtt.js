@@ -27,7 +27,7 @@ aedes.on('unsubscribe', function (subscriptions, client) {
 })
 
 // emitted when a client publishes a message packet on the topic
-aedes.on('publish', function (packet, client) {
+aedes.on('publish', async function (packet, client) {
     if (client) {
         console.log(`[MESSAGE_PUBLISHED] Client ${(client ? client.id : 'BROKER_' + aedes.id)} has published message on ${packet.topic} to broker ${aedes.id}`)
 
@@ -41,16 +41,21 @@ aedes.on('publish', function (packet, client) {
             let livelli = [dict['livelloSensore1'], dict['livelloSensore2'], dict['livelloSensore3']];
 
             //calcola la media
-            let volume = (livelli.reduce((a, b) => a + b, 0))/livelli.length;
+            let altezza = (livelli.reduce((a, b) => a + b, 0))/livelli.length;
 
-            console.log(dict);
+                try {
+                    const res = await db.query("SELECT id_Zona, densita, altezza, diametro, liquido.nome AS liquido FROM silo INNER JOIN liquido ON id_liquido = idliquido WHERE idsilo = $1", [dict['idSilos']])
+                    let rows = res.rows[0];
     
-            //aggiungi su influx i dati
-            db.addMeasurement(dict['idZona'], dict['idSilos'], dict['ph'], dict['tempInt'], dict['tempEst'], dict['umiditaInt'], dict['umiditaEst'], dict['pressioneInt'], 8-volume);
-    
-
-            // fai sapere al PLC che i dati sono stati salvati correttamente
-            aedes.publish({topic:"info", payload: 'ACK'});
+                    //aggiungi su influx i dati
+                    db.addMeasurement(rows['id_zona'], dict['idSilos'], dict['ph'], dict['tempInt'], dict['tempEst'], dict['umiditaInt'], dict['umiditaEst'], dict['pressioneInt'], rows['altezza']-altezza, rows['densita'], rows['liquido'], rows['diametro']);
+            
+        
+                    // fai sapere al PLC che i dati sono stati salvati correttamente
+                    aedes.publish({topic:"info", payload: 'ACK'});
+                  } catch (err) {
+                    console.log(err.stack)
+                  }
         }
     }
 });
