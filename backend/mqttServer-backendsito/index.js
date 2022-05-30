@@ -1,11 +1,8 @@
-//https://www.digitalocean.com/community/tutorials/nodejs-jwt-expressjs
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require("./database");
 const mqtt = require("./brokermqtt")
-const jwt = require('jsonwebtoken');
 
 const app = express();
 const port = 3000;

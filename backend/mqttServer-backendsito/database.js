@@ -31,6 +31,7 @@ function addMeasurement(idZona, idSilos, ph, tempInt, tempEst, umiditaInt,
         console.log(diametro)
     let volume = Math.PI*Math.pow(diametro/2, 2)*altezza;
     let point = new Point(idSilos)
+    .tag("densitaLiquido", densitaLiquido)
     .tag('zona', idZona)
     .tag('liquido', nomeLiquido)
     .floatField('ph', ph)
@@ -41,7 +42,6 @@ function addMeasurement(idZona, idSilos, ph, tempInt, tempEst, umiditaInt,
     .floatField('pressioneInt', pressioneInt)
     .floatField('altezza', altezza)
     .floatField('volume', volume)
-    .floatField("densitaLiquido", densitaLiquido)
     .floatField("peso", volume*densitaLiquido)
 
     console.log(point);
