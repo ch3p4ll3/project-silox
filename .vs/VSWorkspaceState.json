@@ -1,0 +1,10 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\backend",
+    "\\backend\\mqttClient",
+    "\\backend\\mqttServer-backendsito"
+  ],
+  "SelectedNode": "\\backend\\mqttClient\\mqttClient.sln",
+  "PreviewInSolutionExplorer": false
+}
