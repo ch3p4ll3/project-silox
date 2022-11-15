@@ -1,0 +1,398 @@
+openapi: 3.0.2
+info:
+  title: ''
+  version: ''
+paths:
+  /liquids/:
+    get:
+      operationId: listLiquids
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Liquids'
+          description: ''
+      tags:
+      - liquids
+    post:
+      operationId: createLiquids
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Liquids'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Liquids'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Liquids'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Liquids'
+          description: ''
+      tags:
+      - liquids
+  /liquids/{id}/:
+    get:
+      operationId: retrieveLiquids
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this liquids.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Liquids'
+          description: ''
+      tags:
+      - liquids
+  /zones/:
+    get:
+      operationId: listZones
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Zones'
+          description: ''
+      tags:
+      - zones
+    post:
+      operationId: createZones
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Zones'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Zones'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Zones'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zones'
+          description: ''
+      tags:
+      - zones
+  /zones/{id}/:
+    get:
+      operationId: retrieveZones
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this zones.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zones'
+          description: ''
+      tags:
+      - zones
+  /silos/:
+    get:
+      operationId: listSilos
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Silos'
+          description: ''
+      tags:
+      - silos
+    post:
+      operationId: createSilos
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Silos'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Silos'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Silos'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Silos'
+          description: ''
+      tags:
+      - silos
+  /silos/{id}/:
+    get:
+      operationId: retrieveSilos
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this silos.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Silos'
+          description: ''
+      tags:
+      - silos
+  /silos/{id}/all_measurements/:
+    get:
+      operationId: allMeasurementsSilos
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this silos.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Silos'
+          description: ''
+      tags:
+      - silos
+  /silos/{id}/last_measurement/:
+    get:
+      operationId: lastMeasurementSilos
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this silos.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Silos'
+          description: ''
+      tags:
+      - silos
+  /auth/:
+    post:
+      operationId: createAuthToken
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+          description: ''
+      tags:
+      - auth
+  /emqx_webhook:
+    post:
+      operationId: createEmqxWebhoox
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - emqx-webhook
+components:
+  schemas:
+    Liquids:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          maxLength: 1024
+        density:
+          type: number
+      required:
+      - name
+      - description
+      - density
+    Zones:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        latitude:
+          type: number
+        longitude:
+          type: number
+      required:
+      - name
+      - latitude
+      - longitude
+    Silos:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        heigth:
+          type: number
+        diameter:
+          type: number
+        zone:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            name:
+              type: string
+              maxLength: 255
+            latitude:
+              type: number
+            longitude:
+              type: number
+          required:
+          - name
+          - latitude
+          - longitude
+          readOnly: true
+        liquid:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            name:
+              type: string
+              maxLength: 255
+            description:
+              type: string
+              maxLength: 1024
+            density:
+              type: number
+          required:
+          - name
+          - description
+          - density
+          readOnly: true
+        actions:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                readOnly: true
+              action:
+                type: string
+                maxLength: 255
+              description:
+                type: string
+                maxLength: 1024
+              time:
+                type: string
+                format: date-time
+            required:
+            - action
+            - description
+            - time
+          readOnly: true
+        lastmeasurement:
+          type: string
+          readOnly: true
+      required:
+      - heigth
+      - diameter
+    AuthToken:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        token:
+          type: string
+          readOnly: true
+      required:
+      - username
+      - password
