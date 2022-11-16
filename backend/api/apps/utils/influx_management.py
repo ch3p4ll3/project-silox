@@ -1,5 +1,8 @@
+import math
+
 import influxdb_client
 import os
+from statistics import mean
 
 from influxdb_client import WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
@@ -19,11 +22,15 @@ class InfluxDb:
             org=self.__org
         )
 
-    def write(self, data) -> None:
+    def write(self, data, silos_heigth: float) -> None:
         write_api = self.client.write_api(write_options=SYNCHRONOUS)
 
         time = data.pop('time')
         silos_id = data.pop('id')
+
+        data['sensor_1'] = silos_heigth - data['sensor_1']
+        data['sensor_2'] = silos_heigth - data['sensor_2']
+        data['sensor_3'] = silos_heigth - data['sensor_3']
 
         for key, value in data.items():
             p = influxdb_client.Point(f"silos#{silos_id}")\
@@ -31,11 +38,11 @@ class InfluxDb:
                 .time(time, WritePrecision.NS)
             write_api.write(bucket=self.__bucket, org=self.__org, record=p)
 
-    def read(self, silos_id, last=False):
+    def read(self, silos, last=False):
         query_api = self.client.query_api()
         query = f"""from (bucket:"{self.__bucket}")
   |> range(start: -60m)
-  |> filter(fn: (r) => r["_measurement"] == "silos#{silos_id}")
+  |> filter(fn: (r) => r["_measurement"] == "silos#{silos.id}")
   |> filter(fn: (r) => r["_field"] == "ext_humidity" or r["_field"] == "ext_temp" or \
   r["_field"] == "sensor_1" or r["_field"] == "sensor_2" or r["_field"] == "sensor_3" or \
   r["_field"] == "temp" or r["_field"] == "ph" or r["_field"] == "int_temp" or \
@@ -45,14 +52,36 @@ class InfluxDb:
             query += "\n  |> last()"
 
         result = query_api.query(org=self.__org, query=query)
-        results = {}
+        raw_results = {}
         for table in result:
             for record in table.records:
                 time_stamp = str(record.get_time().timestamp())
-                if results.get(time_stamp) is None:
-                    results[time_stamp] = {}
+                if raw_results.get(time_stamp) is None:
+                    raw_results[time_stamp] = {}
 
-                results[time_stamp][record.get_field()] = record.get_value()
+                raw_results[time_stamp][record.get_field()] = record.get_value()
+
+        results = self.__parse_data(raw_results, silos)
+
+        if last:
+            return results[0]
+
+        return {"measurements": results}
+
+    def __parse_data(self, raw_results: dict, silos):
+        results = []
+        for key in raw_results:
+            raw_results[key]['time'] = key
+
+            sensors = [raw_results[key][i] for i in raw_results[key] if i.startswith('sensor')]  # calc silos level
+            raw_results[key]['level'] = mean(sensors)
+            raw_results[key]['level_percentage'] = (mean(sensors) / silos.height) * 100
+
+            volume = math.pi * (silos.diameter / 2) ** 2 * silos.height
+            raw_results[key]['volume'] = volume
+            raw_results[key]['weight'] = volume * silos.liquid.density
+
+            results.append(raw_results[key])
 
         return results
 

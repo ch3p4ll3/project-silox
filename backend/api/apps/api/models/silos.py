@@ -6,7 +6,7 @@ from ...utils.influx_management import InfluxDb
 
 
 class Silos(models.Model):
-    heigth = models.FloatField()
+    height = models.FloatField()
     diameter = models.FloatField()
     zone = models.ForeignKey(Zones, on_delete=models.CASCADE)
     liquid = models.ForeignKey(Liquids, on_delete=models.CASCADE)
@@ -14,7 +14,7 @@ class Silos(models.Model):
 
     def lastmeasurement(self) -> dict:
         # prendere ultima misurazione da influx
-        data = InfluxDb().read(self.id, last=True)
+        data = InfluxDb().read(self, last=True)
         return data
 
     def __str__(self):

@@ -1,8 +1,6 @@
 import time
 import random
 import jsons
-import pytz
-import json
 
 import paho.mqtt.client as mqtt
 
@@ -27,13 +25,14 @@ class Silos:
 
             if var_type is int:
                 random_value = random.randint(1, 10)
-            
+
             elif var_type is float:
-                random_value = random.uniform(0.0, 100.0)
+                random_value = random.uniform(1.0, 25.0)
 
             setattr(self, var, random_value)
-        
+
         self.time = time.time_ns()
+        self.id = 1
 
 
 # The callback for when the client receives a CONNACK response from the server.
@@ -45,20 +44,21 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("info")
 
 # The callback for when a PUBLISH message is received from the server.
+
+
 def on_message(client, userdata, msg):
     if msg.topic == 'info':
         print(msg.topic+" "+str(msg.payload))
 
+
 client = mqtt.Client()
+client.reconnect_delay_set(min_delay=1, max_delay=120)
 client.on_connect = on_connect
 client.on_message = on_message
 
 client.connect("localhost", 1883, 60)
 
-# Blocking call that processes network traffic, dispatches callbacks and
-# handles reconnecting.
-# Other loop*() functions are available that give a threaded interface and a
-# manual interface.
+
 client.loop_start()
 
 a = Silos()
@@ -66,7 +66,9 @@ a = Silos()
 try:
     while True:
         a.random()
-        client.publish('t/measurement', jsons.dumps(a))
+        data = jsons.dumps(a)
+
+        client.publish('t/measurement', data)
         time.sleep(.5)
 
 except KeyboardInterrupt:
