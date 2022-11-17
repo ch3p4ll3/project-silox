@@ -10,8 +10,6 @@ class EmqxWebhoox(APIView):
 
     def post(self, request, format=None):
         data = request.data
-
-        heigth = Silos.objects.filter(id=data['id']).first().height
-        InfluxDb().write(data, heigth)  # salvataggio dati su influx
-        # TODO: modifica altezza sensori con (altezza silos - valore)
+        height = Silos.objects.get(id=data['id']).height
+        InfluxDb().write(data, height)  # salvataggio dati su influx
         return Response()

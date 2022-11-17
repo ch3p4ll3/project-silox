@@ -14,12 +14,12 @@ class Silos:
     int_humidity: float
     ext_humidity: float
     int_pression: float
-    sensor_1: float
-    sensor_2: float
-    sensor_3: float
+    sensor_1: float = 25  # stato iniziale sensori. Se = altezza silos, allora il silos è vuoto
+    sensor_2: float = 25
+    sensor_3: float = 25
     time = None
 
-    def random(self):
+    def riempi(self):
         for var, var_type in self.__annotations__.items():
             random_value = None
 
@@ -28,6 +28,10 @@ class Silos:
 
             elif var_type is float:
                 random_value = random.uniform(1.0, 25.0)
+
+            if var.startswith("sensor_"):
+                current = getattr(self, var)
+                random_value = current - 1.2 + random.uniform(-0.2, 0.2)
 
             setattr(self, var, random_value)
 
@@ -65,7 +69,7 @@ a = Silos()
 
 try:
     while True:
-        a.random()
+        a.riempi()
         data = jsons.dumps(a)
 
         client.publish('t/measurement', data)

@@ -16,9 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
-from rest_framework.schemas import get_schema_view
+from rest_framework.schemas import get_schema_view, openapi
+from rest_framework import permissions
 from django.conf import settings
 from django.conf.urls.static import static
+
+from apps.utils.worker import Worker
+from apps.api.models.silos import Silos
 
 
 urlpatterns = [
@@ -27,9 +31,11 @@ urlpatterns = [
     path('emqx_webhook', include('apps.emqx_webhook.urls')),
 
     path('openapi/', get_schema_view(
+        public=True,
         title="Project Silos",
         description="API for Project Silos",
-        version="1.0.0"
+        version="1.0.0",
+        permission_classes=[permissions.AllowAny]
     ), name='openapi-schema'),
 
     path('swagger-ui/', TemplateView.as_view(
@@ -37,3 +43,5 @@ urlpatterns = [
         extra_context={'schema_url': 'openapi-schema'}
     ), name='swagger-ui'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+settings.SIMS = [Worker(i) for i in Silos.objects.all()]  # usato per creare la lista di tutti i silos

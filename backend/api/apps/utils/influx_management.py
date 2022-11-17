@@ -28,9 +28,9 @@ class InfluxDb:
         time = data.pop('time')
         silos_id = data.pop('id')
 
-        data['sensor_1'] = silos_heigth - data['sensor_1']
-        data['sensor_2'] = silos_heigth - data['sensor_2']
-        data['sensor_3'] = silos_heigth - data['sensor_3']
+        for key in data:
+            if "sensor_" in key:
+                data[key] = silos_heigth - data[key]
 
         for key, value in data.items():
             p = influxdb_client.Point(f"silos#{silos_id}")\
