@@ -122,3 +122,14 @@ class SilosViewSet(viewsets.ModelViewSet):
         settings.SIMS.remove(worker)
 
         return Response()
+
+    @action(detail=True, url_path='actions/status')
+    def is_running(self, request, pk=None):
+        try:
+            silos = Silos.objects.get(id=pk)
+        except Silos.DoesNotExist:
+            return Response({"detail": "Silos not found"}, status=HTTP_404_NOT_FOUND)
+
+        worker = next((i for i in settings.SIMS if i.silos.id == silos.id), None)
+
+        return Response({"is_running": worker is not None})
