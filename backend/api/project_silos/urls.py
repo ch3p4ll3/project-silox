@@ -43,5 +43,3 @@ urlpatterns = [
         extra_context={'schema_url': 'openapi-schema'}
     ), name='swagger-ui'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
-settings.SIMS = [Worker(i) for i in Silos.objects.all()]  # usato per creare la lista di tutti i silos

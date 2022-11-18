@@ -1,7 +1,7 @@
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.status import HTTP_404_NOT_FOUND
+from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_400_BAD_REQUEST
 from rest_framework import viewsets
 
 from ..models.silos import Silos
@@ -50,40 +50,75 @@ class SilosViewSet(viewsets.ModelViewSet):
         worker = next((i for i in settings.SIMS if i.silos), None)
 
         if worker is None:
-            worker = Worker(silos)
-            settings.SIMS.append(worker)
+            return Response({"detail": "Worker not started"}, status=HTTP_404_NOT_FOUND)
 
         worker.fill()
 
         return Response({"detail": f"filling silos#{pk}"})
 
     @action(url_path='actions/empty', detail=True)
-    def unload(self, request, pk=None):
+    def empty(self, request, pk=None):
         try:
             silos = Silos.objects.get(id=pk)
         except Silos.DoesNotExist:
             return Response({"detail": "Silos not found"}, status=HTTP_404_NOT_FOUND)
 
-        worker = next((i for i in settings.SIMS if i.silos), None)
+        worker = next((i for i in settings.SIMS if i.silos.id == silos.id), None)
 
         if worker is None:
-            worker = Worker(silos)
-            settings.SIMS.append(worker)
+            return Response({"detail": "Worker not started"}, status=HTTP_404_NOT_FOUND)
 
         worker.empty()
 
         return Response({"detail": f"emptying silos#{pk}"})
 
     @action(detail=True, url_path='actions/stop')
-    def last_measurement(self, request, pk=None):
+    def stop(self, request, pk=None):
         try:
             silos = Silos.objects.get(id=pk)
         except Silos.DoesNotExist:
             return Response({"detail": "Silos not found"}, status=HTTP_404_NOT_FOUND)
 
-        worker = next((i for i in settings.SIMS if i.silos), None)
+        worker = next((i for i in settings.SIMS if i.silos.id == silos.id), None)
 
-        if worker is not None:
-            worker.stop()
+        if worker is None:
+            return Response({"detail": "Worker not started"}, status=HTTP_404_NOT_FOUND)
+
+        worker.stop()
 
         return Response({"detail": "worker stopped"})
+
+    @action(detail=True, url_path='actions/start_worker')
+    def start_worker(self, request, pk=None):
+        try:
+            silos = Silos.objects.get(id=pk)
+        except Silos.DoesNotExist:
+            return Response({"detail": "Silos not found"}, status=HTTP_404_NOT_FOUND)
+
+        worker = next((i for i in settings.SIMS if i.silos.id == silos.id), None)
+
+        if worker is not None:
+            return Response({"detail": "Worker already started"}, status=HTTP_400_BAD_REQUEST)
+
+        worker = Worker(silos)
+        settings.SIMS.append(worker)
+        worker.start()
+
+        return Response()
+
+    @action(detail=True, url_path='actions/stop_worker')
+    def stop_worker(self, request, pk=None):
+        try:
+            silos = Silos.objects.get(id=pk)
+        except Silos.DoesNotExist:
+            return Response({"detail": "Silos not found"}, status=HTTP_404_NOT_FOUND)
+
+        worker = next((i for i in settings.SIMS if i.silos.id == silos.id), None)
+
+        if worker is None:
+            return Response({"detail": "Worker not started"}, status=HTTP_404_NOT_FOUND)
+
+        worker.stop_worker()
+        settings.SIMS.remove(worker)
+
+        return Response()

@@ -41,15 +41,20 @@ class InfluxDb:
     def read(self, silos, last=False):
         query_api = self.client.query_api()
         query = f"""from (bucket:"{self.__bucket}")
-  |> range(start: -60m)
+  |> range(start: -7d)
   |> filter(fn: (r) => r["_measurement"] == "silos#{silos.id}")
   |> filter(fn: (r) => r["_field"] == "ext_humidity" or r["_field"] == "ext_temp" or \
   r["_field"] == "sensor_1" or r["_field"] == "sensor_2" or r["_field"] == "sensor_3" or \
   r["_field"] == "temp" or r["_field"] == "ph" or r["_field"] == "int_temp" or \
-  r["_field"] == "int_pression" or r["_field"] == "int_humidity")"""
+  r["_field"] == "int_pression" or r["_field"] == "int_humidity")
+"""
 
         if last:
             query += "\n  |> last()"
+
+        else:
+            query += """  |> sort(columns: ["_time"], desc: true)
+  |> limit(n:10, offset:10)"""
 
         result = query_api.query(org=self.__org, query=query)
         raw_results = {}
