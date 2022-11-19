@@ -1,10 +1,50 @@
 <!-- Generator: Widdershins v4.0.1 -->
 
-<h1 id=""> v</h1>
+<h1 id="">Project Silos API</h1>
 
-> Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.
+## API Index
+- [Liquids](#liquids)
+  - [List Liquids](#listliquids)
+  - [Create](#createliquids)
+  - [Delete](#destroyliquids)
+  - [Partial Update](#partialupdateliquids)
+  - [Update](#updateliquids)
+  - [Retrieve](#retrieveliquids)
 
-<h1 id="-liquids">liquids</h1>
+
+- [Zones](#zones)
+  - [Create](#createzones)
+  - [Delete](#destroyzones)
+  - [List Zones](#listzones)
+  - [Partial Update](#partialupdatezones)
+  - [Retrieve](#retrievezones)
+  - [Update](#updatezones)
+
+
+- [Silos](#silos)
+  - [Create](#createsilos)
+  - [List Silos](#listsilos)
+  - [Partial Update](#partialupdatesilos)
+  - [Retrieve](#retrievesilos)
+  - [All measurements](#allmeasurementssilos)
+  - [Last Measurement](#lastmeasurementsilos)
+
+
+- [Actions](#actions)
+  - [Create](#createactions)
+  - [List Actions](#listactions)
+  - [Retrieve](#retrieveactions)
+
+
+- [Auth](#auth)
+  - [Create](#createauthtoken)
+
+
+- [EMQX Webhook](#emqx-webhook)
+  - [Create](#createemqxwebhoox)
+
+
+# Liquids
 
 ## listLiquids
 
@@ -316,11 +356,9 @@ curl -X DELETE /liquids/{id}/
 |---|---|---|---|
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|none|None|
 
-<aside class="success">
-This operation does not require authentication
-</aside>
 
-<h1 id="-zones">zones</h1>
+
+# Zones
 
 ## listZones
 
@@ -370,9 +408,7 @@ Status Code **200**
 |» latitude|number|true|none|none|
 |» longitude|number|true|none|none|
 
-<aside class="success">
-This operation does not require authentication
-</aside>
+
 
 ## createZones
 
@@ -432,9 +468,7 @@ longitude: 0
 |---|---|---|---|
 |201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|none|[Zones](#schemazones)|
 
-<aside class="success">
-This operation does not require authentication
-</aside>
+
 
 ## retrieveZones
 
@@ -476,9 +510,7 @@ curl -X GET /zones/{id}/ \
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|[Zones](#schemazones)|
 
-<aside class="success">
-This operation does not require authentication
-</aside>
+
 
 ## updateZones
 
@@ -539,9 +571,7 @@ longitude: 0
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|[Zones](#schemazones)|
 
-<aside class="success">
-This operation does not require authentication
-</aside>
+
 
 ## partialUpdateZones
 
@@ -602,9 +632,7 @@ longitude: 0
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|[Zones](#schemazones)|
 
-<aside class="success">
-This operation does not require authentication
-</aside>
+
 
 ## destroyZones
 
@@ -632,11 +660,8 @@ curl -X DELETE /zones/{id}/
 |---|---|---|---|
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|none|None|
 
-<aside class="success">
-This operation does not require authentication
-</aside>
 
-<h1 id="-silos">silos</h1>
+# Silos
 
 ## listSilos
 
@@ -736,9 +761,7 @@ Status Code **200**
 |»» time|string(date-time)|true|none|none|
 |» lastmeasurement|string|false|read-only|none|
 
-<aside class="success">
-This operation does not require authentication
-</aside>
+
 
 ## createSilos
 
@@ -832,9 +855,7 @@ diameter: 0
 |---|---|---|---|
 |201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|none|[Silos](#schemasilos)|
 
-<aside class="success">
-This operation does not require authentication
-</aside>
+
 
 ## retrieveSilos
 
@@ -912,9 +933,7 @@ curl -X GET /silos/{id}/ \
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|[Silos](#schemasilos)|
 
-<aside class="success">
-This operation does not require authentication
-</aside>
+
 
 ## partialUpdateSilos
 
@@ -1009,9 +1028,7 @@ diameter: 0
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|[Silos](#schemasilos)|
 
-<aside class="success">
-This operation does not require authentication
-</aside>
+
 
 ## allMeasurementsSilos
 
@@ -1068,9 +1085,7 @@ curl -X GET /silos/{id}/all_measurements/ \
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|[Silos](#schemasilos)|
 
-<aside class="success">
-This operation does not require authentication
-</aside>
+
 
 ## lastMeasurementSilos
 
@@ -1125,11 +1140,8 @@ curl -X GET /silos/{id}/last_measurement/ \
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|[Silos](#schemasilos)|
 
-<aside class="success">
-This operation does not require authentication
-</aside>
 
-<h1 id="-actions">actions</h1>
+# Actions
 
 ## listActions
 
@@ -1179,9 +1191,7 @@ Status Code **200**
 |» description|string|true|none|none|
 |» time|string(date-time)|true|none|none|
 
-<aside class="success">
-This operation does not require authentication
-</aside>
+
 
 ## createActions
 
@@ -1241,9 +1251,7 @@ time: 2019-08-24T14:15:22Z
 |---|---|---|---|
 |201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|none|[Actions](#schemaactions)|
 
-<aside class="success">
-This operation does not require authentication
-</aside>
+
 
 ## retrieveActions
 
@@ -1285,11 +1293,9 @@ curl -X GET /actions/{id}/ \
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|[Actions](#schemaactions)|
 
-<aside class="success">
-This operation does not require authentication
-</aside>
 
-<h1 id="-auth">auth</h1>
+
+# Auth
 
 ## createAuthToken
 
@@ -1344,11 +1350,9 @@ password: string
 |---|---|---|---|
 |201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|none|[AuthToken](#schemaauthtoken)|
 
-<aside class="success">
-This operation does not require authentication
-</aside>
 
-<h1 id="-emqx-webhook">emqx-webhook</h1>
+
+# Emqx-webhook
 
 ## createEmqxWebhoox
 
@@ -1399,9 +1403,6 @@ null
 
 <h3 id="createemqxwebhoox-responseschema">Response Schema</h3>
 
-<aside class="success">
-This operation does not require authentication
-</aside>
 
 # Schemas
 
