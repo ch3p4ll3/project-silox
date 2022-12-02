@@ -556,24 +556,6 @@ components:
           type: number
         diameter:
           type: number
-        zone:
-          type: object
-          properties:
-            id:
-              type: integer
-              readOnly: true
-            name:
-              type: string
-              maxLength: 255
-            latitude:
-              type: number
-            longitude:
-              type: number
-          required:
-          - name
-          - latitude
-          - longitude
-          readOnly: true
         liquid:
           type: object
           properties:

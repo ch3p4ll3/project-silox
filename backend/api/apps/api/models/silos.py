@@ -1,17 +1,14 @@
 from django.db import models
-from .zones import Zones
 from .liquids import Liquids
-from .actions import Actions
 from ...utils.influx_management import InfluxDb
 from django.conf import settings
 
 
 class Silos(models.Model):
+    name = models.CharField(max_length=255)
     height = models.FloatField()
     diameter = models.FloatField()
-    zone = models.ForeignKey(Zones, on_delete=models.CASCADE)
     liquid = models.ForeignKey(Liquids, on_delete=models.CASCADE)
-    actions = models.ManyToManyField(Actions, blank=True)
 
     def lastmeasurement(self) -> dict:
         data = InfluxDb().read(self, last=True)

@@ -14,7 +14,7 @@ class InfluxDb:
         self.__bucket = "silos"
         self.__token = os.environ.get("INFLUXDB_TOKEN")
         # Store the URL of your InfluxDB instance
-        self.__url = "http://localhost:8086"
+        self.__url = "http://influxdb:8086"
 
         self.client = influxdb_client.InfluxDBClient(
             url=self.__url,
@@ -69,7 +69,10 @@ class InfluxDb:
         results = self.__parse_data(raw_results, silos)
 
         if last:
-            return results[0]
+            try:
+                return results[0]
+            except IndexError:
+                return ''
 
         return {"measurements": results}
 

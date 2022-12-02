@@ -40,24 +40,8 @@ class SilosViewSet(viewsets.ModelViewSet):
         data = InfluxDb().read(silos, last=True)
         return Response(data)
 
-    @action(url_path='actions/fill', detail=True)
-    def fill(self, request, pk=None):
-        try:
-            silos = Silos.objects.get(id=pk)
-        except Silos.DoesNotExist:
-            return Response({"detail": "Silos not found"}, status=HTTP_404_NOT_FOUND)
-
-        worker = next((i for i in settings.SIMS if i.silos), None)
-
-        if worker is None:
-            return Response({"detail": "Worker not started"}, status=HTTP_404_NOT_FOUND)
-
-        worker.fill()
-
-        return Response({"detail": f"filling silos#{pk}"})
-
-    @action(url_path='actions/empty', detail=True)
-    def empty(self, request, pk=None):
+    @action(url_path=r'actions/fill/(?P<percentage>\d+)', detail=True)
+    def fill(self, request, pk=None, percentage=100):
         try:
             silos = Silos.objects.get(id=pk)
         except Silos.DoesNotExist:
@@ -68,7 +52,23 @@ class SilosViewSet(viewsets.ModelViewSet):
         if worker is None:
             return Response({"detail": "Worker not started"}, status=HTTP_404_NOT_FOUND)
 
-        worker.empty()
+        worker.fill(100 - int(percentage))
+
+        return Response({"detail": f"filling silos#{pk}"})
+
+    @action(url_path=r'actions/empty/(?P<percentage>\d+)', detail=True)
+    def empty(self, request, pk=None, percentage=0):
+        try:
+            silos = Silos.objects.get(id=pk)
+        except Silos.DoesNotExist:
+            return Response({"detail": "Silos not found"}, status=HTTP_404_NOT_FOUND)
+
+        worker = next((i for i in settings.SIMS if i.silos.id == silos.id), None)
+
+        if worker is None:
+            return Response({"detail": "Worker not started"}, status=HTTP_404_NOT_FOUND)
+
+        worker.empty(int(percentage))
 
         return Response({"detail": f"emptying silos#{pk}"})
 

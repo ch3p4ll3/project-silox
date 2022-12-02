@@ -1,0 +1,6 @@
+venv/
+docs/
+README.md
+*.pyc
+.env
+*.png
