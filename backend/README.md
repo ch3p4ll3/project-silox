@@ -1,5 +1,7 @@
 # Backend
 
+TOFIX: simulatore in docker
+
 ## API
 Progetto django che gestisce le API per il frontend, la connessione con influxdb e la gestione del simulatore
 

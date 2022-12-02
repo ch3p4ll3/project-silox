@@ -85,7 +85,7 @@ class InfluxDb:
             raw_results[key]['level'] = mean(sensors)
             raw_results[key]['level_percentage'] = (mean(sensors) / silos.height) * 100
 
-            volume = math.pi * (silos.diameter / 2) ** 2 * silos.height
+            volume = math.pi * (silos.diameter / 2) ** 2 * mean(sensors)
             raw_results[key]['volume'] = volume
             raw_results[key]['weight'] = volume * silos.liquid.density
 

@@ -20,7 +20,7 @@ class Silos(models.Model):
         return worker is not None
 
     def __str__(self):
-        return f"silos#{self.id}"
+        return self.name
 
     class Meta:
         verbose_name_plural = "Silos"

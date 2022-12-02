@@ -10,6 +10,7 @@ class SilosMeasurement:
     int_humidity: float
     ext_humidity: float
     int_pression: float
+    co2: float
     id: int
     sensor_1: float
     sensor_2: float
@@ -47,9 +48,9 @@ class SilosMeasurement:
             if var.startswith("sensor_"):  # modifica valori sensori solo se ci sono cambi di stato(fill/empty)
                 current = getattr(self, var)
                 if fill:
-                    random_value = current - 1.2 + random.uniform(-0.2, 0.2)
+                    random_value = current - 0.2 + random.uniform(-0.02, 0.02)
                 else:
-                    random_value = current + 1.2 + random.uniform(-0.2, 0.2)
+                    random_value = current + 0.2 + random.uniform(-0.02, 0.02)
 
             setattr(self, var, random_value)
 

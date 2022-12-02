@@ -31,7 +31,7 @@ class Worker(Thread):
         self.__client.on_connect = self.__on_connect
         self.__client.on_message = self.__on_message
     
-        self.__client.connect("localhost", 1883, 60)
+        self.__client.connect("emqx", 1883, 60)
         self.__client.loop_start()
 
     @staticmethod
