@@ -10,8 +10,8 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 
 class InfluxDb:
     def __init__(self) -> None:
-        self.__org = "org"
-        self.__bucket = "silos"
+        self.__org = os.environ.get("INFLUXDB_ORG")
+        self.__bucket = os.environ.get("INFLUXDB_BUCKET")
         self.__token = os.environ.get("INFLUXDB_TOKEN")
         # Store the URL of your InfluxDB instance
         self.__url = "http://influxdb:8086"

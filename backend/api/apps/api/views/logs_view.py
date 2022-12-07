@@ -15,16 +15,6 @@ class LogsViewSet(viewsets.ModelViewSet):
     http_method_names = ('get',)
     authentication_classes = (TokenAuthentication,)
 
-    @action(url_path=r'(?P<silos_id>\w+)/last', detail=False)
-    def last_silos_log(self, request, silos_id):
-        try:
-            silos = Silos.objects.get(id=silos_id)
-        except Silos.DoesNotExist:
-            return Response({"detail": "Silos not found"}, status=HTTP_404_NOT_FOUND)
-
-        last_log = Logs.get_by_silos(silos)
-        return Response(LogsSerializer(last_log).data)
-
     @action(url_path=r'(?P<silos_id>\w+)/last/(?P<logs_number>\w+)', detail=False)
     def last_silos_log(self, request, silos_id, logs_number):
         try:

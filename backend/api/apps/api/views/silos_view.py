@@ -99,6 +99,8 @@ class SilosViewSet(viewsets.ModelViewSet):
 
         if worker is not None:
             return Response({"detail": "Worker already started"}, status=HTTP_400_BAD_REQUEST)
+        elif silos.liquid is None:
+            return Response({"detail": "Silos has no liquid"}, status=HTTP_400_BAD_REQUEST)
 
         worker = Worker(silos)
         settings.SIMS.append(worker)

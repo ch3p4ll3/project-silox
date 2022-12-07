@@ -8,6 +8,12 @@ services:
     environment:
       - SECRET_KEY=${DJANGO_TOKEN}
       - INFLUXDB_TOKEN=${INFLUX_TOKEN}
+      - INFLUXDB_ORG=${INFLUX_ORG}
+      - INFLUXDB_BUCKET=${INFLUX_BUCKET}
+
+    depends_on:
+      - influxdb
+      - emqx
 
     networks:
       - internal_network

@@ -60,7 +60,7 @@ class Worker(Thread):
         sensors = [self.__silos.sensor_1, self.__silos.sensor_2, self.__silos.sensor_3]
         sensors = [self.silos.height - i for i in sensors]
         cur_percentage = (mean(sensors) / self.silos.height) * 100
-        return self.action is not Actions.IDLE and int(cur_percentage) - 5 <= self.__percentage <= int(cur_percentage) + 5
+        return self.action is not Actions.IDLE and int(cur_percentage) - 1 <= self.__percentage <= int(cur_percentage) + 1
 
     def set_idle_level(self):
         sensors = [self.__silos.sensor_1, self.__silos.sensor_2, self.__silos.sensor_3]

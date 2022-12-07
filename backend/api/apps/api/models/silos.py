@@ -8,7 +8,7 @@ class Silos(models.Model):
     name = models.CharField(max_length=255)
     height = models.FloatField()
     diameter = models.FloatField()
-    liquid = models.ForeignKey(Liquids, on_delete=models.CASCADE)
+    liquid = models.ForeignKey(Liquids, on_delete=models.CASCADE, null=True, blank=True)
 
     def lastmeasurement(self) -> dict:
         data = InfluxDb().read(self, last=True)
