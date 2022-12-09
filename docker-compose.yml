@@ -1,4 +1,4 @@
-version: "1.0"
+version: "3"
 services:
   api:
     build: backend/api
@@ -10,13 +10,21 @@ services:
       - INFLUXDB_TOKEN=${INFLUX_TOKEN}
       - INFLUXDB_ORG=${INFLUX_ORG}
       - INFLUXDB_BUCKET=${INFLUX_BUCKET}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 
     depends_on:
+      - db
       - influxdb
       - emqx
 
+    volumes:
+      - static_volume:/app/static
+
     networks:
       - internal_network
+
 
   influxdb:
     image: "influxdb:latest"
@@ -37,6 +45,7 @@ services:
     networks:
       - internal_network
 
+
   emqx:
     image: "emqx:latest"
     ports:
@@ -50,12 +59,52 @@ services:
     networks:
       - internal_network
 
+
+  nginx:
+    image: pagespeed/nginx-pagespeed:latest
+    ports:
+      - "80:80"
+      - "443:443"
+
+    depends_on:
+      - api
+    volumes:
+      - ./nginx_configs:/etc/nginx/conf.d/
+      - static_volume:/app/static  # <-- bind the static volume
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
+    networks:
+      - internal_network
+
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
+
+
+  db:
+    image: postgres
+    volumes:
+      - postgres_volume:/var/postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+
+    networks:
+      - internal_network
+
 volumes:
   influxdb-storage:
   vol-emqx-data:
   vol-emqx-etc:
   vol-emqx-log:
-
+  static_volume:
+  postgres_volume:
 
 networks:
   internal_network:
