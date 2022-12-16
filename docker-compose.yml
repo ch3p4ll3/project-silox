@@ -2,6 +2,7 @@ version: "3"
 services:
   api:
     build: backend/api
+    restart: always
     ports:
       - "8080:8080"
 
@@ -19,6 +20,9 @@ services:
       - influxdb
       - emqx
 
+    links:
+      - db:db
+
     volumes:
       - static_volume:/app/static
 
@@ -28,6 +32,7 @@ services:
 
   influxdb:
     image: "influxdb:latest"
+    restart: always
     volumes:
       - influxdb-storage:/var/lib/influxdb2
     ports:
@@ -48,6 +53,7 @@ services:
 
   emqx:
     image: "emqx:latest"
+    restart: always
     ports:
       - "18083:18083"
       - "1883:1883"
@@ -61,7 +67,8 @@ services:
 
 
   nginx:
-    image: pagespeed/nginx-pagespeed:latest
+    image: "pagespeed/nginx-pagespeed:latest"
+    restart: always
     ports:
       - "80:80"
       - "443:443"
@@ -78,23 +85,24 @@ services:
 
 
   certbot:
-    image: certbot/certbot:latest
+    image: "certbot/certbot:latest"
     volumes:
       - ./certbot/www/:/var/www/certbot/:rw
       - ./certbot/conf/:/etc/letsencrypt/:rw
 
 
   db:
-    image: postgres
+    image: "image: postgres:13.4-alpine"
+    restart: always
+    container_name: db
     volumes:
-      - postgres_volume:/var/postgres
-    ports:
-      - "5432:5432"
+      - postgres_data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-
+    ports:
+      - "5432:5432"
     networks:
       - internal_network
 
@@ -104,7 +112,7 @@ volumes:
   vol-emqx-etc:
   vol-emqx-log:
   static_volume:
-  postgres_volume:
+  postgres_data:
 
 networks:
   internal_network:

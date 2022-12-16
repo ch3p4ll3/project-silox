@@ -49,7 +49,7 @@ class Worker(Thread):
 
     @property
     def __is_empty(self):
-        return self.action is Actions.EMPTY and self.__silos.sensor_1 >= self.silos.height
+        return self.action is Actions.EMPTY and self.__silos.sensor_1 >= self.silos.size.height
 
     @property
     def __is_full(self):
@@ -58,8 +58,8 @@ class Worker(Thread):
     @property
     def __completed(self):
         sensors = [self.__silos.sensor_1, self.__silos.sensor_2, self.__silos.sensor_3]
-        sensors = [self.silos.height - i for i in sensors]
-        cur_percentage = (mean(sensors) / self.silos.height) * 100
+        sensors = [self.silos.size.height - i for i in sensors]
+        cur_percentage = (mean(sensors) / self.silos.size.height) * 100
         return self.action is not Actions.IDLE and int(cur_percentage) - 1 <= self.__percentage <= int(cur_percentage) + 1
 
     def set_idle_level(self):
@@ -71,7 +71,7 @@ class Worker(Thread):
                 return
         else:
             if self.__is_empty:
-                self.__silos.sensor_1 = self.__silos.sensor_2 = self.__silos.sensor_3 = self.silos.height
+                self.__silos.sensor_1 = self.__silos.sensor_2 = self.__silos.sensor_3 = self.silos.size.height
                 return
 
         self.__silos.sensor_1 = self.__silos.sensor_2 = self.__silos.sensor_3 = mean(sensors)

@@ -19,9 +19,9 @@ class SilosMeasurement:
 
     def __init__(self, silos):
         self.id = silos.id
-        self.sensor_1: float = silos.height  # stato iniziale sensori. Se = altezza silos, allora il silos è vuoto
-        self.sensor_2: float = silos.height
-        self.sensor_3: float = silos.height
+        self.sensor_1: float = silos.size.height  # stato iniziale sensori. Se = altezza silos, allora il silos è vuoto
+        self.sensor_2: float = silos.size.height
+        self.sensor_3: float = silos.size.height
 
     def fill(self):
         self.__generate(idle=False, fill=True)
