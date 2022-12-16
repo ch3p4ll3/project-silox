@@ -22,7 +22,7 @@ class InfluxDb:
             org=self.__org
         )
 
-    def write(self, data, silos_heigth: float) -> None:
+    def write(self, data, silos_height: float) -> None:
         write_api = self.client.write_api(write_options=SYNCHRONOUS)
 
         time = data.pop('time')
@@ -30,7 +30,7 @@ class InfluxDb:
 
         for key in data:
             if "sensor_" in key:
-                data[key] = silos_heigth - data[key]
+                data[key] = silos_height - data[key]
 
         for key, value in data.items():
             p = influxdb_client.Point(f"silos#{silos_id}")\
@@ -83,9 +83,9 @@ class InfluxDb:
 
             sensors = [raw_results[key][i] for i in raw_results[key] if i.startswith('sensor')]  # calc silos level
             raw_results[key]['level'] = mean(sensors)
-            raw_results[key]['level_percentage'] = (mean(sensors) / silos.height) * 100
+            raw_results[key]['level_percentage'] = (mean(sensors) / silos.size.height) * 100
 
-            volume = math.pi * (silos.diameter / 2) ** 2 * mean(sensors)
+            volume = math.pi * (silos.size.diameter / 2) ** 2 * mean(sensors)
             raw_results[key]['volume'] = volume
             raw_results[key]['weight'] = volume * silos.liquid.density
 
