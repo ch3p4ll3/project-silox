@@ -3,9 +3,9 @@ services:
   api:
     build: backend/api
     restart: always
+    command: gunicorn project_silos.wsgi:application --bind 0.0.0.0:8080 --workers 5
     ports:
       - "8080:8080"
-
     environment:
       - SECRET_KEY=${DJANGO_TOKEN}
       - INFLUXDB_TOKEN=${INFLUX_TOKEN}
@@ -14,21 +14,16 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-
     depends_on:
       - db
       - influxdb
       - emqx
-
     links:
       - db:db
-
     volumes:
       - static_volume:/app/static
-
     networks:
       - internal_network
-
 
   influxdb:
     image: "influxdb:latest"
@@ -37,7 +32,6 @@ services:
       - influxdb-storage:/var/lib/influxdb2
     ports:
       - "8086:8086"
-
     environment:
       - DOCKER_INFLUXDB_INIT_MODE=setup
       - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUX_USERNAME}
@@ -46,10 +40,8 @@ services:
       - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUX_BUCKET}
       - DOCKER_INFLUXDB_INIT_RETENTION=1w
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUX_TOKEN}
-
     networks:
       - internal_network
-
 
   emqx:
     image: "emqx:latest"
@@ -61,10 +53,8 @@ services:
       - vol-emqx-data:/opt/emqx/data
       - vol-emqx-etc:/opt/emqx/etc
       - vol-emqx-log:/opt/emqx/log
-
     networks:
       - internal_network
-
 
   nginx:
     image: "pagespeed/nginx-pagespeed:latest"
@@ -72,7 +62,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-
     depends_on:
       - api
     volumes:
@@ -83,16 +72,14 @@ services:
     networks:
       - internal_network
 
-
   certbot:
     image: "certbot/certbot:latest"
     volumes:
       - ./certbot/www/:/var/www/certbot/:rw
       - ./certbot/conf/:/etc/letsencrypt/:rw
 
-
   db:
-    image: "image: postgres:13.4-alpine"
+    image: "postgres:13.4-alpine"
     restart: always
     container_name: db
     volumes:
@@ -101,6 +88,11 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     ports:
       - "5432:5432"
     networks:
