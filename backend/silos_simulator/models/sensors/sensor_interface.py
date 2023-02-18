@@ -4,6 +4,7 @@ class Sensor:
     min: float
     max: float
     time: float
+    slung: str
 
     def get_value(self):
         pass

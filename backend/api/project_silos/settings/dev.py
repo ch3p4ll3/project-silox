@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.api',
-    'apps.emqx_webhook',
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken'

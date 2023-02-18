@@ -10,6 +10,7 @@ class TempSensor(Sensor):
     min: float
     max: float
     time: float
+    slung: str
 
     def __init__(self, name: str, max_val: float, min_val: float, slung: str):
         self.name = name

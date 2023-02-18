@@ -1,14 +1,14 @@
 import random
 import time
-import json
 from threading import Thread
 
 from enum import Enum
-from models.sensors import TempSensor, LevelSensor
 from mqttConnector import MQTTConnector
 from models.silos import Silos
 from paho.mqtt.client import MQTTMessage
-from topics import Topics
+from models.topics import Topics
+
+from utils import Utils
 
 
 class Actions(Enum):
@@ -23,56 +23,62 @@ class Simulator(Thread):
         self.is_running = True
         self.actions: Actions = Actions.IDLE
         self.protocol = MQTTConnector(self.silos).bootstrap_mqtt()
-        self.sensors = [
-            TempSensor('Internal Temperature', 30, 20, "int_temp"),
-            TempSensor('External Temperature', 30, 20, "ext_temp"),
-        ]
-        self.level_sensors = [
-            LevelSensor('Level Sensor 1', self.silos.size.height, 0, 'level_1'),
-            LevelSensor('Level Sensor 2', self.silos.size.height, 0, 'level_2')
-        ]
         self.level: float = 0
         Thread.__init__(self)
 
     def on_message(self, client, boh, message: MQTTMessage):
-        payload: dict = json.loads(message.payload.decode())
+        payload: dict = Utils.decode_payload(message.payload.decode())
 
-        if message.topic == self.protocol.topics.subscribe.kill:
+        if message.topic == Utils.get_subscribe_topic(self.silos, Topics.subscribe.kill):
             self.kill(payload)
 
-        elif message.topic == self.protocol.topics.subscribe.fill:
+        elif message.topic == Utils.get_subscribe_topic(self.silos, Topics.subscribe.fill):
             self.fill(payload)
 
-        elif message.topic == self.protocol.topics.subscribe.empty:
+        elif message.topic == Utils.get_subscribe_topic(self.silos, Topics.subscribe.empty):
             self.empty(payload)
 
-        elif message.topic == self.protocol.topics.subscribe.idle:
-            self.idle(payload)
+        elif message.topic == Utils.get_subscribe_topic(self.silos, Topics.subscribe.idle):
+            self.idle()
+
+        elif message.topic == Utils.get_subscribe_topic(self.silos, Topics.subscribe.start_simulation):
+            self.start_simulation()
+        
+        elif message.topic == Utils.get_subscribe_topic(self.silos, Topics.subscribe.kill):
+            self.stop_simulation()
+
+    def __is_not_full(self, level_sensor):
+        return self.level > (1 - level_sensor.value / self.silos.size.height) / 100
+
+    def __is_not_empty(self, level_sensor):
+        return self.level < (1 - level_sensor.value / self.silos.size.height) * 100
 
     def run(self):
         self.__init_mqtt()
-        while self.is_running:
-            for sensor in self.sensors:
-                topic = Topics(self.silos.id, sensor.slung).publish.topic
-                self.protocol.client.publish(topic, sensor.get_value(), 2)
+        while True:
+            while self.is_running:
+                for sensor in self.silos.sensors:
+                    topic = Utils.get_publish_topic(self.silos, sensor, Topics.publish.topic)
+                    self.protocol.client.publish(topic, sensor.get_value(), 2)
 
-            for level_sensor in self.level_sensors:
-                topic = Topics(self.silos.id, level_sensor.slung).publish.topic
-                if self.actions is Actions.FILL:
-                    if self.level > (1 - level_sensor.value / self.silos.size.height) / 100:
-                        level_sensor.value -= random.uniform(0.05, 0.1)
-                    else:
-                        self.actions = Actions.IDLE
+                for level_sensor in self.silos.level_sensor:
+                    topic = Utils.get_publish_topic(self.silos, level_sensor, Topics.publish.topic)
 
-                elif self.actions is Actions.EMPTY:
-                    if self.level < (1 - level_sensor.value / self.silos.size.height) * 100:
-                        level_sensor.value += random.uniform(0.05, 0.1)
-                    else:
-                        self.actions = Actions.IDLE
+                    if self.actions is Actions.FILL:
+                        if self.__is_not_full(level_sensor):
+                            level_sensor.value -= random.uniform(0.05, 0.1)
+                        else:
+                            self.actions = Actions.IDLE
 
-                self.protocol.client.publish(topic, level_sensor.get_value(), 2)
+                    elif self.actions is Actions.EMPTY:
+                        if self.__is_not_empty(level_sensor):
+                            level_sensor.value += random.uniform(0.05, 0.1)
+                        else:
+                            self.actions = Actions.IDLE
 
-            time.sleep(1)
+                    self.protocol.client.publish(topic, level_sensor.get_value(), qos=2)
+
+                time.sleep(1)
 
     def __init_mqtt(self):
         self.protocol.client.on_message = self.on_message
@@ -86,7 +92,7 @@ class Simulator(Thread):
         self.level = payload.get('percentage') or 0
         self.actions = Actions.EMPTY
 
-    def idle(self, payload: dict):
+    def idle(self):
         self.actions = Actions.IDLE
 
     def kill(self, payload: dict):
@@ -94,3 +100,9 @@ class Simulator(Thread):
             self.is_running = False
             self.protocol.client.loop_stop()
             self.protocol.client.disconnect()
+
+    def start_simulation(self):
+        self.is_running = True
+
+    def stop_simulation(self):
+        self.is_running = False
