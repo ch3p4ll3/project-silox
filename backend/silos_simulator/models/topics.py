@@ -5,7 +5,7 @@ from string import Template
 @dataclass
 class PublishTopics:
     """Topics for the simulator to publish to."""
-    topic: Template = Template('t/simulator/silos/${silos_id}/measurements/${slung}')
+    topic: Template = Template('t/simulator/silos/${silos_id}/measurements/${slug}')
 
 
 @dataclass

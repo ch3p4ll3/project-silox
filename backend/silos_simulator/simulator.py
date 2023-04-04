@@ -21,6 +21,7 @@ class Simulator(Thread):
     def __init__(self, silos: Silos):
         self.silos = silos
         self.is_running = True
+        self.to_kill = False
         self.actions: Actions = Actions.IDLE
         self.protocol = MQTTConnector(self.silos).bootstrap_mqtt()
         self.level: float = 0
@@ -55,7 +56,7 @@ class Simulator(Thread):
 
     def run(self):
         self.__init_mqtt()
-        while True:
+        while not self.to_kill:
             while self.is_running:
                 for sensor in self.silos.sensors:
                     topic = Utils.get_publish_topic(self.silos, sensor, Topics.publish.topic)
@@ -85,11 +86,11 @@ class Simulator(Thread):
         self.protocol.client.loop_start()
 
     def fill(self, payload: dict):
-        self.level = payload.get('percentage') or 100
+        self.level = payload.get('percentage', 100)
         self.actions = Actions.FILL
 
     def empty(self, payload: dict):
-        self.level = payload.get('percentage') or 0
+        self.level = payload.get('percentage', 0)
         self.actions = Actions.EMPTY
 
     def idle(self):
@@ -98,6 +99,7 @@ class Simulator(Thread):
     def kill(self, payload: dict):
         if payload.get('kill'):
             self.is_running = False
+            self.to_kill = True
             self.protocol.client.loop_stop()
             self.protocol.client.disconnect()
 

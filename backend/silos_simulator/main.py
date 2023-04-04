@@ -13,8 +13,8 @@ level_sensors = [
     LevelSensor('Level Sensor 2', 10, 0, 'level_2')
 ]
 
-silos1 = Silos("silos1", Size(10, 3), sensors, level_sensors)
-silos2 = Silos("silos2", Size(10, 4), sensors, level_sensors)
+silos1 = Silos("1", Size(10, 3), sensors, level_sensors)
+silos2 = Silos("2", Size(10, 4), sensors, level_sensors)
 
 
 simulators = [

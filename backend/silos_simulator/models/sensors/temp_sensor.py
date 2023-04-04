@@ -10,13 +10,13 @@ class TempSensor(Sensor):
     min: float
     max: float
     time: float
-    slung: str
+    slug: str
 
-    def __init__(self, name: str, max_val: float, min_val: float, slung: str):
+    def __init__(self, name: str, max_val: float, min_val: float, slug: str):
         self.name = name
         self.max = max_val
         self.min = min_val
-        self.slung = slung
+        self.slug = slug
 
     def get_value(self):
         self.value = random.uniform(self.min, self.max)

@@ -167,3 +167,9 @@ LOGGING = {
         },
     },
 }
+
+MQTT_USER = "esp32"
+MQTT_PSW = "Password"
+MQTT_HOST = "10.188.26.102"
+MQTT_PORT = 1883
+MQTT_KEEP_ALIVE = 120

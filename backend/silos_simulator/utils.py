@@ -12,7 +12,7 @@ class Utils:
     def get_publish_topic(silos: Silos, sensor: Sensor, template: Template):
         return template.substitute(
             silos_id=silos.id,
-            slung=sensor.slung
+            slug=sensor.slug
         )
 
     @staticmethod
