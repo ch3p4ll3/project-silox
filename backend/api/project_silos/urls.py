@@ -25,7 +25,6 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.api.urls')),
-    path('emqx_webhook', include('apps.emqx_webhook.urls')),
 
     path('openapi/', get_schema_view(
         public=True,

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models.sensors_in_silos import SensorsInSilos
+from ..models import SensorsInSilos
 from .sensors_types_serializer import SensorsTypesSerializer
 
 
@@ -8,4 +8,4 @@ class SensorsInSilosSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SensorsInSilos
-        fields = ('sensor', 'last_maintenance', 'position')
+        fields = ('id', 'sensor', 'last_maintenance', 'position')

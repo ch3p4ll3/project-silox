@@ -22,34 +22,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = getenv('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
-ALLOWED_HOSTS = ['api.projectsilox.ml']
-CSRF_TRUSTED_ORIGINS = ['https://api.projectsilox.ml']
-
-
-# Application definition
-
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'apps.api',
-    'apps.emqx_webhook',
-    'corsheaders',
-    'rest_framework',
-    'rest_framework.authtoken'
-]
-
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated'
-    ]
-}
+ALLOWED_HOSTS = ['api.projectsilox.ml', 'localhost', '127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://api.projectsilox.ml', 'http://localhost', 'http://127.0.0.1']
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -147,8 +121,6 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-SIMS = []
 
 LOGGING = {
     "version": 1,

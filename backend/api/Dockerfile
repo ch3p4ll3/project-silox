@@ -12,8 +12,9 @@ EXPOSE 8080
 
 RUN cd /app
 
-RUN python manage.py collectstatic --no-input -v 2 --settings=project_silos.settings.production
-RUN python manage.py migrate --noinput --settings=project_silos.settings.production
+#RUN python manage.py collectstatic --no-input -v 2
+#RUN python manage.py makemigrations --noinput
+#RUN python manage.py migrate --noinput
 #RUN python manage.py createsuperuser --noinput --username "$DJANGO_USERNAME"
 #CMD ["gunicorn", "-c", "config/gunicorn/production.py"]
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8080", "--settings=project_silos.settings.production"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]

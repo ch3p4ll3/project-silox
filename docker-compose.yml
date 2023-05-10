@@ -5,7 +5,6 @@ services:
     restart: always
     ports:
       - "8080:8080"
-
     environment:
       - SECRET_KEY=${DJANGO_TOKEN}
       - INFLUXDB_TOKEN=${INFLUX_TOKEN}
@@ -14,21 +13,25 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-
+      - MQTT_USER=${MQTT_USER}
+      - MQTT_PSW=${MQTT_PSW}
+      - MQTT_HOST=${MQTT_HOST}
+      - MQTT_PORT=${MQTT_PORT}
+      - MQTT_KEEP_ALIVE=${MQTT_KEEP_ALIVE}
+      - DEBUG=${DEBUG}
     depends_on:
-      - db
-      - influxdb
-      - emqx
-
+      db:
+        condition: service_healthy
+      influxdb:
+        condition: service_started
+      emqx:
+        condition: service_started
     links:
       - db:db
-
     volumes:
       - static_volume:/app/static
-
     networks:
       - internal_network
-
 
   influxdb:
     image: "influxdb:latest"
@@ -37,7 +40,6 @@ services:
       - influxdb-storage:/var/lib/influxdb2
     ports:
       - "8086:8086"
-
     environment:
       - DOCKER_INFLUXDB_INIT_MODE=setup
       - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUX_USERNAME}
@@ -46,10 +48,8 @@ services:
       - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUX_BUCKET}
       - DOCKER_INFLUXDB_INIT_RETENTION=1w
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUX_TOKEN}
-
     networks:
       - internal_network
-
 
   emqx:
     image: "emqx:latest"
@@ -57,14 +57,13 @@ services:
     ports:
       - "18083:18083"
       - "1883:1883"
+      - "8083:8083"
     volumes:
       - vol-emqx-data:/opt/emqx/data
       - vol-emqx-etc:/opt/emqx/etc
       - vol-emqx-log:/opt/emqx/log
-
     networks:
       - internal_network
-
 
   nginx:
     image: "pagespeed/nginx-pagespeed:latest"
@@ -72,7 +71,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-
     depends_on:
       - api
     volumes:
@@ -83,16 +81,14 @@ services:
     networks:
       - internal_network
 
-
   certbot:
     image: "certbot/certbot:latest"
     volumes:
       - ./certbot/www/:/var/www/certbot/:rw
       - ./certbot/conf/:/etc/letsencrypt/:rw
 
-
   db:
-    image: "image: postgres:13.4-alpine"
+    image: "postgres:13.4-alpine"
     restart: always
     container_name: db
     volumes:
@@ -101,6 +97,11 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 1s
+      timeout: 1s
+      retries: 10
     ports:
       - "5432:5432"
     networks:
