@@ -2,6 +2,7 @@ import datetime
 import json
 import random
 from .sensor_interface import Sensor
+from statistics import mean
 
 
 class TempSensor(Sensor):
@@ -19,7 +20,7 @@ class TempSensor(Sensor):
         self.slug = slug
 
     def get_value(self):
-        self.value = random.uniform(self.min, self.max)
+        self.value = random.gauss(mean([self.min, self.max]), 2)
 
         return json.dumps({
             "name": self.name,

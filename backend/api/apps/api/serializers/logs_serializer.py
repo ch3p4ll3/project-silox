@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models.logs import Logs
+from ..models import Logs
 
 
 class LogsSerializer(serializers.ModelSerializer):

@@ -9,7 +9,7 @@ class Silos(models.Model):
     size = models.ForeignKey(Sizes, on_delete=models.CASCADE, null=True, blank=True)
     liquid = models.ForeignKey(Liquids, on_delete=models.CASCADE, null=True, blank=True)
 
-    sensors = models.ManyToManyField(SensorsTypes, through='SensorsInSilos')
+    sensors = models.ManyToManyField(SensorsTypes, through='SensorsInSilos', blank=True, null=True)
 
     def __str__(self):
         return self.name

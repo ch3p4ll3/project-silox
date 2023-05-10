@@ -1,5 +1,5 @@
 from rest_framework.authentication import TokenAuthentication
-from ..models.sensors_types import SensorsTypes
+from ..models import SensorsTypes
 
 from rest_framework import viewsets
 

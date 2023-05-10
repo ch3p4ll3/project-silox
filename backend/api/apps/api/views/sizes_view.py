@@ -1,5 +1,5 @@
 from rest_framework.authentication import TokenAuthentication
-from ..models.sizes import Sizes
+from ..models import Sizes
 
 from rest_framework import viewsets
 

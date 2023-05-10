@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models.liquids import Liquids
+from ..models import Liquids
 
 
 class LiquidsSerializer(serializers.ModelSerializer):

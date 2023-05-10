@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models.sizes import Sizes
+from ..models import Sizes
 
 
 class SizesSerializer(serializers.ModelSerializer):

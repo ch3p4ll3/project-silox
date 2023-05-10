@@ -3,7 +3,6 @@ services:
   api:
     build: backend/api
     restart: always
-    command: gunicorn project_silos.wsgi:application --bind 0.0.0.0:8080 --workers 5
     ports:
       - "8080:8080"
     environment:
@@ -14,10 +13,19 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - MQTT_USER=${MQTT_USER}
+      - MQTT_PSW=${MQTT_PSW}
+      - MQTT_HOST=${MQTT_HOST}
+      - MQTT_PORT=${MQTT_PORT}
+      - MQTT_KEEP_ALIVE=${MQTT_KEEP_ALIVE}
+      - DEBUG=${DEBUG}
     depends_on:
-      - db
-      - influxdb
-      - emqx
+      db:
+        condition: service_healthy
+      influxdb:
+        condition: service_started
+      emqx:
+        condition: service_started
     links:
       - db:db
     volumes:
@@ -49,6 +57,7 @@ services:
     ports:
       - "18083:18083"
       - "1883:1883"
+      - "8083:8083"
     volumes:
       - vol-emqx-data:/opt/emqx/data
       - vol-emqx-etc:/opt/emqx/etc
@@ -90,9 +99,9 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      interval: 1s
+      timeout: 1s
+      retries: 10
     ports:
       - "5432:5432"
     networks:

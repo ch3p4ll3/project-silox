@@ -1,5 +1,5 @@
 from rest_framework.authentication import TokenAuthentication
-from ..models.liquids import Liquids
+from ..models import Liquids
 
 from rest_framework import viewsets
 
