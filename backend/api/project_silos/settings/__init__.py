@@ -1,7 +1,7 @@
 from os import getenv
 
 
-DEBUG = getenv("DEBUG")
+DEBUG = getenv("DEBUG", True)
 
 if DEBUG.lower() == 'true':
     from .dev import *
