@@ -8,7 +8,7 @@ from .sensors_in_silos_serializer import SensorsInSilosSerializer
 class SilosSerializer(serializers.ModelSerializer):
     liquid = LiquidsSerializer(read_only=True)
     size = SizesSerializer(read_only=True)
-    sensors = SensorsInSilosSerializer(source='sensorsinsilos_set', many=True)
+    sensors = SensorsInSilosSerializer(source='sensorsinsilos_set', many=True, required=False)
 
     class Meta:
         model = Silos
