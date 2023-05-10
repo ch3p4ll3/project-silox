@@ -1,0 +1,7 @@
+venv/
+docs/
+README.md
+*.pyc
+.env
+*.png
+openapi-schema.yml

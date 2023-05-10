@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="PYTHON_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="django" name="Django">
+      <configuration>
+        <option name="rootFolder" value="$MODULE_DIR$/backend/api" />
+        <option name="settingsModule" value="project_silos/settings/dev.py" />
+        <option name="manageScript" value="manage.py" />
+        <option name="environment" value="&lt;map&gt;&#10;  &lt;entry&gt;&#10;    &lt;string&gt;POSTGRES_USER&lt;/string&gt;&#10;    &lt;string&gt;postgres&lt;/string&gt;&#10;  &lt;/entry&gt;&#10;  &lt;entry&gt;&#10;    &lt;string&gt;INFLUX_ORG&lt;/string&gt;&#10;    &lt;string&gt;org&lt;/string&gt;&#10;  &lt;/entry&gt;&#10;  &lt;entry&gt;&#10;    &lt;string&gt;INFLUX_PSW&lt;/string&gt;&#10;    &lt;string&gt;qwerty159&lt;/string&gt;&#10;  &lt;/entry&gt;&#10;  &lt;entry&gt;&#10;    &lt;string&gt;DJANGO_TOKEN&lt;/string&gt;&#10;    &lt;string&gt;django-insecure-!pe$e72e4_s$$s7l93rnpl&amp;amp;4\=5z@9t*sg#b7-rwgs$nq7(pq8#&lt;/string&gt;&#10;  &lt;/entry&gt;&#10;  &lt;entry&gt;&#10;    &lt;string&gt;POSTGRES_PASSWORD&lt;/string&gt;&#10;    &lt;string&gt;qwerty159&lt;/string&gt;&#10;  &lt;/entry&gt;&#10;  &lt;entry&gt;&#10;    &lt;string&gt;DJANGO_PSW&lt;/string&gt;&#10;    &lt;string&gt;qwerty159&lt;/string&gt;&#10;  &lt;/entry&gt;&#10;  &lt;entry&gt;&#10;    &lt;string&gt;INFLUX_BUCKET&lt;/string&gt;&#10;    &lt;string&gt;silos&lt;/string&gt;&#10;  &lt;/entry&gt;&#10;  &lt;entry&gt;&#10;    &lt;string&gt;POSTGRES_DB&lt;/string&gt;&#10;    &lt;string&gt;silos&lt;/string&gt;&#10;  &lt;/entry&gt;&#10;  &lt;entry&gt;&#10;    &lt;string&gt;INFLUX_TOKEN&lt;/string&gt;&#10;    &lt;string&gt;NuYFW9jvKl2xKtQs3DjZm80pSql4E8it9ESG3fgHO9_GFMK3sXSzon3PiUP8brDVHW167U3V06xSyzmpEbgPTQ\=\=&lt;/string&gt;&#10;  &lt;/entry&gt;&#10;  &lt;entry&gt;&#10;    &lt;string&gt;DJANGO_USERNAME&lt;/string&gt;&#10;    &lt;string&gt;admin&lt;/string&gt;&#10;  &lt;/entry&gt;&#10;  &lt;entry&gt;&#10;    &lt;string&gt;INFLUX_USERNAME&lt;/string&gt;&#10;    &lt;string&gt;admin&lt;/string&gt;&#10;  &lt;/entry&gt;&#10;&lt;/map&gt;" />
+        <option name="doNotUseTestRunner" value="false" />
+        <option name="trackFilePattern" value="" />
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/backend/venv" />
+    </content>
+    <orderEntry type="jdk" jdkName="Python 3.10 (project-work-tantitank)" jdkType="Python SDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+  <component name="TemplatesService">
+    <option name="TEMPLATE_CONFIGURATION" value="Django" />
+  </component>
+</module>

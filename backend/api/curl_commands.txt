@@ -1,0 +1,40 @@
+# Login
+curl 127.0.0.1:8000/api/auth/ -d "{\"username\": \"mattia\", \"password\": \"qwerty159\"}" -i -X POST -H "Content-Type: application/json"
+
+Table Zones {
+  id int [pk]
+  name varchar
+  latitude float
+  longitude float
+}
+
+Table Silos {
+  id int [pk]
+  heigth float
+  diameter float
+  zone int
+  liquid int
+  action int
+}
+
+Table Liquido {
+  id int [pk]
+  nome varchar
+  descr varchar
+  density float
+}
+
+Table Actions {
+  id int [pk]
+  action varchar
+  descr varchar
+  time datetime
+}
+
+
+
+Ref: "Silos"."liquid" > "Liquido"."id"
+
+Ref: "Zones"."id" < "Silos"."zone"
+
+Ref: "Silos"."action" <> "Actions"."id"
