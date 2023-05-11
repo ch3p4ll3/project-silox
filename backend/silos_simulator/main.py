@@ -6,6 +6,7 @@ if __name__ == '__main__':
     try:
         a = MqttListener()
         a.run()
-    except:
+    except Exception as e:
+        print(e)
         a.protocol.client.loop_stop()
         a.protocol.client.disconnect()

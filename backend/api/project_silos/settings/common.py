@@ -1,8 +1,8 @@
 from os import getenv
 
-DEBUG = getenv("DEBUG", 'true')
+DEBUG = getenv("DEBUG", 'true').lower() == 'true'
 
-if DEBUG.lower() == 'true':
+if DEBUG:
     from .dev import *
 else:
     from .production import *

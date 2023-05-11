@@ -20,7 +20,7 @@ class TempSensor(Sensor):
         self.slug = slug
 
     def get_value(self):
-        self.value = random.gauss(mean([self.min, self.max]), 2)
+        self.value = mean([self.min, self.max]) + random.gauss(mean([self.min, self.max]), 1.5)
 
         return json.dumps({
             "name": self.name,

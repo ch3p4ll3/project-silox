@@ -11,6 +11,10 @@ from django.shortcuts import get_object_or_404
 
 from ...utils.mqtt import client
 
+from logging import getLogger
+
+logger = getLogger(__name__)
+
 
 class SilosViewSet(viewsets.ModelViewSet):
     queryset = Silos.objects.all()
@@ -21,6 +25,8 @@ class SilosViewSet(viewsets.ModelViewSet):
     @action(url_path=r'actions/fill/(?P<percentage>\d+)', detail=True)
     def fill(self, request, pk=None, percentage=100):
         silos = get_object_or_404(Silos, id=pk)
+
+        logger.info(f"filling silos#{pk}")
 
         # mqtt publish fill
         data = json.dumps(
@@ -38,6 +44,8 @@ class SilosViewSet(viewsets.ModelViewSet):
     def empty(self, request, pk=None, percentage=0):
         silos = get_object_or_404(Silos, id=pk)
 
+        logger.info(f"emptying silos#{pk}")
+
         # mqtt publish empty
         data = json.dumps(
             {
@@ -54,6 +62,8 @@ class SilosViewSet(viewsets.ModelViewSet):
     def idle(self, request, pk=None):
         silos = get_object_or_404(Silos, id=pk)
 
+        logger.info(f"idle silos#{pk}")
+
         data = {
             "id": silos.id
         }
@@ -68,6 +78,8 @@ class SilosViewSet(viewsets.ModelViewSet):
     def start_worker(self, request, pk=None):
         silos = get_object_or_404(Silos, id=pk)
 
+        logger.info(f"starting worker#{pk}")
+
         # mqtt publish start sim
         silos.status = True
         silos.save()
@@ -80,6 +92,8 @@ class SilosViewSet(viewsets.ModelViewSet):
     @action(detail=True, url_path='actions/stop_worker')
     def stop_worker(self, request, pk=None):
         silos = get_object_or_404(Silos, id=pk)
+
+        logger.info(f"stopping worker#{pk}")
 
         silos.status = False
         silos.save()
@@ -97,6 +111,8 @@ class SilosViewSet(viewsets.ModelViewSet):
     @action(detail=True, url_path='actions/kill')
     def kill_worker(self, request, pk=None):
         silos = get_object_or_404(Silos, id=pk)
+        
+        logger.info(f"killing worker#{pk}")
 
         # mqtt publish kill
         data = json.dumps(
