@@ -1,6 +1,9 @@
 # Backend
 
 TOFIX: ingester in docker
+TODO: Simulatore MQTT collegato a DB
+TODO: status simulazione su frontend
+
 
 ## API
 Progetto django che gestisce le API per il frontend, la connessione con influxdb e la gestione del simulatore

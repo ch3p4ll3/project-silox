@@ -27,7 +27,7 @@ class Simulator(Thread):
         self.level: float = 0
         Thread.__init__(self)
 
-    def on_message(self, client, boh, message: MQTTMessage):
+        def on_message(self, client, boh, message: MQTTMessage):
         payload: dict = Utils.decode_payload(message.payload.decode())
 
         if message.topic == Utils.get_subscribe_topic(self.silos, Topics.subscribe.kill):

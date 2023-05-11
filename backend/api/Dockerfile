@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM python:3.11
 
 WORKDIR /app
 
@@ -12,9 +12,4 @@ EXPOSE 8080
 
 RUN cd /app
 
-#RUN python manage.py collectstatic --no-input -v 2
-#RUN python manage.py makemigrations --noinput
-#RUN python manage.py migrate --noinput
-#RUN python manage.py createsuperuser --noinput --username "$DJANGO_USERNAME"
-#CMD ["gunicorn", "-c", "config/gunicorn/production.py"]
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]
+ENTRYPOINT ["sh", "docker-entrypoint.sh"]

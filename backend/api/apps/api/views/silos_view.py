@@ -15,7 +15,7 @@ from ...utils.mqtt import client
 class SilosViewSet(viewsets.ModelViewSet):
     queryset = Silos.objects.all()
     serializer_class = SilosSerializer
-    http_method_names = ('get', 'post', 'patch')
+    http_method_names = ('get', 'post', 'patch', 'delete', 'put')
     authentication_classes = (TokenAuthentication,)
 
     @action(url_path=r'actions/fill/(?P<percentage>\d+)', detail=True)
