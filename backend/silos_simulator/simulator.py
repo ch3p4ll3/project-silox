@@ -27,7 +27,7 @@ class Simulator(Thread):
         self.level: float = 0
         Thread.__init__(self)
 
-        def on_message(self, client, boh, message: MQTTMessage):
+    def on_message(self, client, boh, message: MQTTMessage):
         payload: dict = Utils.decode_payload(message.payload.decode())
 
         if message.topic == Utils.get_subscribe_topic(self.silos, Topics.subscribe.kill):
@@ -45,7 +45,7 @@ class Simulator(Thread):
         elif message.topic == Utils.get_subscribe_topic(self.silos, Topics.subscribe.start_simulation):
             self.start_simulation()
         
-        elif message.topic == Utils.get_subscribe_topic(self.silos, Topics.subscribe.kill):
+        elif message.topic == Utils.get_subscribe_topic(self.silos, Topics.subscribe.stop_simulation):
             self.stop_simulation()
 
     def __is_not_full(self, level_sensor):

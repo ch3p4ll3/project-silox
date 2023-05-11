@@ -5,7 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import viewsets
 
-from ..models import Silos
+from ..models import Silos, Logs
 from ..serializers.silos_serializer import SilosSerializer
 from django.shortcuts import get_object_or_404
 
@@ -25,9 +25,11 @@ class SilosViewSet(viewsets.ModelViewSet):
         # mqtt publish fill
         data = json.dumps(
             {
+                "id": silos.id,
                 "percentage": int(percentage)
             }
         )
+        Logs.add_log("fill", "filling silos", silos)
         client.publish(f't/simulator/silos/{silos.id}/command/fill', data, qos=2)
 
         return Response({"detail": f"filling silos#{pk}"})
@@ -39,9 +41,11 @@ class SilosViewSet(viewsets.ModelViewSet):
         # mqtt publish empty
         data = json.dumps(
             {
+                "id": silos.id,
                 "percentage": int(percentage)
             }
         )
+        Logs.add_log("empty", "emptying silos", silos)
         client.publish(f't/simulator/silos/{silos.id}/command/empty', data, qos=2)
 
         return Response({"detail": f"emptying silos#{pk}"})
@@ -50,8 +54,13 @@ class SilosViewSet(viewsets.ModelViewSet):
     def idle(self, request, pk=None):
         silos = get_object_or_404(Silos, id=pk)
 
+        data = {
+            "id": silos.id
+        }
+
         # mqtt publish stop sim
-        client.publish(f't/simulator/silos/{silos.id}/command/idle', '', qos=2)
+        Logs.add_log("idle", "idle", silos)
+        client.publish(f't/simulator/silos/{silos.id}/command/idle', json.dumps(data), qos=2)
 
         return Response({"detail": "worker stopped"})
 
@@ -60,7 +69,11 @@ class SilosViewSet(viewsets.ModelViewSet):
         silos = get_object_or_404(Silos, id=pk)
 
         # mqtt publish start sim
-        client.publish(f't/simulator/silos/{silos.id}/command/start', '', qos=2)
+        silos.status = True
+        silos.save()
+
+        Logs.add_log("start worker", "starting worker", silos)
+        client.publish(f't/simulator/silos/{silos.id}/command/start', json.dumps(SilosSerializer(silos).data), qos=2)
 
         return Response()
 
@@ -68,21 +81,32 @@ class SilosViewSet(viewsets.ModelViewSet):
     def stop_worker(self, request, pk=None):
         silos = get_object_or_404(Silos, id=pk)
 
+        silos.status = False
+        silos.save()
+
+        data = {
+            "id": silos.id
+        }
+
         # mqtt publish stop sim
-        client.publish(f't/simulator/silos/{silos.id}/command/stop', '', qos=2)
+        Logs.add_log("stop", "stopping worker", silos)
+        client.publish(f't/simulator/silos/{silos.id}/command/stop', json.dumps(data), qos=2)
 
         return Response()
 
     @action(detail=True, url_path='actions/kill')
-    def stop_worker(self, request, pk=None):
+    def kill_worker(self, request, pk=None):
         silos = get_object_or_404(Silos, id=pk)
 
         # mqtt publish kill
         data = json.dumps(
             {
+                "id": silos.id,
                 "kill": True
             }
         )
+
+        Logs.add_log("kill", "killing silos", silos)
         client.publish(f't/simulator/silos/{silos.id}/command/kill', data, qos=2)
 
         return Response()

@@ -1,6 +1,6 @@
 from os import getenv
 
-DEBUG = getenv("DEBUG")
+DEBUG = getenv("DEBUG", 'true')
 
 if DEBUG.lower() == 'true':
     from .dev import *
@@ -30,6 +30,6 @@ REST_FRAMEWORK = {
 
 MQTT_USER = getenv("MQTT_USER")
 MQTT_PSW = getenv("MQTT_PSW")
-MQTT_HOST = getenv("MQTT_HOST")
-MQTT_PORT = int(getenv("MQTT_PORT"))
-MQTT_KEEP_ALIVE = int(getenv("MQTT_KEEP_ALIVE"))
+MQTT_HOST = getenv("MQTT_HOST", 'localhost')
+MQTT_PORT = int(getenv("MQTT_PORT", 1883))
+MQTT_KEEP_ALIVE = int(getenv("MQTT_KEEP_ALIVE", 120))

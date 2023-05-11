@@ -2,7 +2,6 @@ import json
 
 from models.sensors.sensor_interface import Sensor
 from models.silos import Silos
-from models.topics import Topics
 
 from string import Template
 

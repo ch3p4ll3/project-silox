@@ -17,9 +17,10 @@ class SubscribeTopics:
     kill: Template = Template('t/simulator/silos/${silos_id}/command/kill')
     start_simulation: Template = Template('t/simulator/silos/${silos_id}/command/start')
     stop_simulation: Template = Template('t/simulator/silos/${silos_id}/command/stop')
+    commands: Template = Template('t/simulator/silos/${silos_id}/command/#')
 
     def __iter__(self):
-        return iter([self.fill, self.empty, self.idle, self.kill])
+        return iter([self.fill, self.empty, self.idle, self.kill, self.stop_simulation, self.start_simulation])
 
 
 @dataclass

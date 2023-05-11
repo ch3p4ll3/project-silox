@@ -12,4 +12,4 @@ class SilosSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Silos
-        fields = ('id', 'name', 'size', 'liquid', 'sensors')
+        fields = ('id', 'name', 'status', 'size', 'liquid', 'sensors')

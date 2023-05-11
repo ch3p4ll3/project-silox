@@ -8,6 +8,7 @@ class Silos(models.Model):
     name = models.CharField(max_length=255)
     size = models.ForeignKey(Sizes, on_delete=models.CASCADE, null=True, blank=True)
     liquid = models.ForeignKey(Liquids, on_delete=models.CASCADE, null=True, blank=True)
+    status = models.BooleanField(default=False)
 
     sensors = models.ManyToManyField(SensorsTypes, through='SensorsInSilos', blank=True)
 

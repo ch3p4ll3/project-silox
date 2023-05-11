@@ -12,6 +12,10 @@ class Logs(models.Model):
     def get_by_silos(cls, silos: Silos, limit=1):
         return cls.objects.filter(silos=silos).all()[:limit]
 
+    @classmethod
+    def add_log(cls, status, description, silos):
+        cls.objects.create(status=status, description=description, silos=silos)
+
     def __str__(self):
         return f"{self.silos.id}-{self.status}"
 

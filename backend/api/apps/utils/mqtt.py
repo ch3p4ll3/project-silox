@@ -10,7 +10,7 @@ def on_connect(mqtt_client, user_data, flags, rc):
         logger.info('Connected to MQTT broker')
 
 
-client = mqtt.Client()
+client = mqtt.Client(clean_session=True)
 client.on_connect = on_connect
 client.username_pw_set(settings.MQTT_USER, settings.MQTT_PSW)
 client.connect(
