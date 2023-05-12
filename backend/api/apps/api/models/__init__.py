@@ -6,3 +6,5 @@ from .sensors_types import SensorsTypes
 from .sensors_in_silos import SensorsInSilos
 from .liquid_properties import LiquidProperties
 from .property import Properties
+from .measure_units import MeasureUnits
+from .sensors_typology import SensorsTypology

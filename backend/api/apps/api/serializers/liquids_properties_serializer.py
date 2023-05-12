@@ -4,8 +4,6 @@ from .properties_serializer import PropertiesSerializer
 
 
 class LiquidsPropertiesSerializer(serializers.ModelSerializer):
-    property = PropertiesSerializer()
-
     class Meta:
         model = LiquidProperties
-        fields = ('id', 'property', 'min', 'max')
+        fields = '__all__'

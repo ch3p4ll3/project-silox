@@ -1,12 +1,12 @@
 import paho.mqtt.client as paho
 from paho.mqtt.client import Client
 from uuid import uuid4
+from os import getenv
 
-broker = "localhost"
-port = 1883
-ca_file = "certs/file.pem"
-cert_file = "certs/file.crt"
-key_file = "certs/file.key"
+broker = getenv("MQTT_HOST")
+port = int(getenv("MQTT_PORT"))
+username = getenv("MQTT_USER")
+password = getenv("MQTT_PSW")
 
 
 class MQTTConnector:
@@ -25,6 +25,7 @@ class MQTTConnector:
 
     def bootstrap_mqtt(self):
         self.client = paho.Client(client_id=self.client_id, clean_session=False)
+        self.client.username_pw_set(username=username, password=password)
 
         # self.client.tls_set(
         #     ca_file,

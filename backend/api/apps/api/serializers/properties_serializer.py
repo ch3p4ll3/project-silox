@@ -5,4 +5,4 @@ from ..models import Properties
 class PropertiesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Properties
-        fields = ('id', 'name', 'description')
+        fields = '__all__'

@@ -7,6 +7,10 @@ from rest_framework import viewsets
 
 from ..models import Silos, Logs
 from ..serializers.silos_serializer import SilosSerializer
+from ..serializers.size_serializer import SizesSerializer
+from ..serializers.liquids_serializer import LiquidsSerializer
+from ..serializers.sensors_types_serializer import SensorsTypesSerializer
+
 from django.shortcuts import get_object_or_404
 
 from ...utils.mqtt import client
@@ -84,8 +88,14 @@ class SilosViewSet(viewsets.ModelViewSet):
         silos.status = True
         silos.save()
 
+        data = SilosSerializer(silos).data
+
+        data['size'] = SizesSerializer(silos.size).data
+        data['liquid'] = LiquidsSerializer(silos.liquid).data
+        data['sensors'] = SensorsTypesSerializer(silos.sensors.all(), many=True).data
+
         Logs.add_log("start worker", "starting worker", silos)
-        client.publish(f't/simulator/silos/{silos.id}/command/start', json.dumps(SilosSerializer(silos).data), qos=2)
+        client.publish(f't/simulator/silos/{silos.id}/command/start', json.dumps(data), qos=2)
 
         return Response()
 

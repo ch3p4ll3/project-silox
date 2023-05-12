@@ -19,24 +19,24 @@ class MqttListener:
         self.protocol.client.loop_forever()
 
     def __get_silos(self, payload: dict):
-        sensors = [sensor for sensor in payload['sensors'] if sensor['sensor']['sensor_type'] != 'level']
+        sensors = [sensor for sensor in payload['sensors'] if sensor['sensor_type'] != 'level']
         sensors = [
             TempSensor(
-                sensor['sensor']['sensor_name'],
-                sensor['sensor']['max_value'],
-                sensor['sensor']['min_value'],
-                sensor['sensor']['sensor_slug']
+                sensor['sensor_name'],
+                sensor['max_value'],
+                sensor['min_value'],
+                sensor['sensor_slug']
             ) for sensor in sensors
         ]
 
-        level_sensors = [sensor for sensor in payload['sensors'] if sensor['sensor']['sensor_type'] == 'level']
+        level_sensors = [sensor for sensor in payload['sensors'] if sensor['sensor_type'] == 'level']
 
         level_sensors = [
             LevelSensor(
-                sensor['sensor']['sensor_name'],
-                sensor['sensor']['max_value'],
-                sensor['sensor']['min_value'],
-                sensor['sensor']['sensor_slug']
+                sensor['sensor_name'],
+                sensor['max_value'],
+                sensor['min_value'],
+                sensor['sensor_slug']
             ) for sensor in level_sensors
         ]
 

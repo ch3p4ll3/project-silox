@@ -6,3 +6,5 @@ from .sensors_types_view import SensorsTypesViewSet
 from .silos_view import SilosViewSet
 from .properties_view import PropertiesViewSet
 from .sizes_view import SizesViewSet
+from .measure_units_view import MeasureUnitsViewSet
+from .sensors_typology_view import SensorsTypologyViewSet
