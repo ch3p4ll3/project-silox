@@ -10,7 +10,7 @@ from statistics import mean
 # If Coefficient is 3, the values will be more concentrated around the mean (99.7% OK)
 # If Coefficient is 2 , the values will be more concentrated around the mean (95.4% OK)
 # If Coefficient is 1, the values will be more dispersed (68.2% OK)
-COEFFICIENT = 1.5
+COEFFICIENT = 1.85
 
 
 class TempSensor(Sensor):
@@ -32,7 +32,10 @@ class TempSensor(Sensor):
         media = mean([self.min, self.max])
         sigma = self.max - media / COEFFICIENT
         """
-        self.value = mean([self.min, self.max]) + random.gauss(mean([self.min, self.max]), 1.5)
+        _mean = mean([self.min, self.max])
+        sigma = self.max - _mean / COEFFICIENT
+
+        self.value = _mean + random.gauss(_mean, sigma)
 
         return json.dumps({
             "name": self.name,

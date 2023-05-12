@@ -9,7 +9,9 @@ from ..models import Silos, Logs
 from ..serializers.silos_serializer import SilosSerializer
 from ..serializers.size_serializer import SizesSerializer
 from ..serializers.liquids_serializer import LiquidsSerializer
-from ..serializers.sensors_types_serializer import SensorsTypesSerializer
+from ..serializers.sensors_typology_serializer import SensorsTypologySerializer
+from ..serializers.liquids_properties_serializer import LiquidsPropertiesSerializer
+from ..serializers.properties_serializer import PropertiesSerializer
 
 from django.shortcuts import get_object_or_404
 
@@ -92,7 +94,10 @@ class SilosViewSet(viewsets.ModelViewSet):
 
         data['size'] = SizesSerializer(silos.size).data
         data['liquid'] = LiquidsSerializer(silos.liquid).data
-        data['sensors'] = SensorsTypesSerializer(silos.sensors.all(), many=True).data
+        data['liquid']['properties'] = LiquidsPropertiesSerializer(silos.liquid.properties.all(), many=True).data
+        data['sensors'] = SensorsTypologySerializer(silos.sensors.all(), many=True).data
+
+        #print(json.dumps(data))
 
         Logs.add_log("start worker", "starting worker", silos)
         client.publish(f't/simulator/silos/{silos.id}/command/start', json.dumps(data), qos=2)
