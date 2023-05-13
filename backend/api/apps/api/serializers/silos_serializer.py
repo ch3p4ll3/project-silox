@@ -13,3 +13,4 @@ class SilosSerializer(serializers.ModelSerializer):
     class Meta:
         model = Silos
         fields = '__all__'
+        # depth = 6

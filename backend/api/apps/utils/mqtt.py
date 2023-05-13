@@ -6,7 +6,8 @@ logger = logging.getLogger(__name__)
 
 
 def on_connect(mqtt_client, user_data, flags, rc):
-    if rc == 0:
+    """The callback for when the client receives a CONNACK response from the server."""
+    if rc == 0:  # Connection successful
         logger.info('Connected to MQTT broker')
 
 

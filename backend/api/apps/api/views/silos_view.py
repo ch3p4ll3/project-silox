@@ -11,7 +11,7 @@ from ..serializers.size_serializer import SizesSerializer
 from ..serializers.liquids_serializer import LiquidsSerializer
 from ..serializers.sensors_typology_serializer import SensorsTypologySerializer
 from ..serializers.liquids_properties_serializer import LiquidsPropertiesSerializer
-from ..serializers.properties_serializer import PropertiesSerializer
+from ..serializers.sensors_types_serializer import SensorsTypesSerializer
 
 from django.shortcuts import get_object_or_404
 
@@ -23,6 +23,7 @@ logger = getLogger(__name__)
 
 
 class SilosViewSet(viewsets.ModelViewSet):
+    """Silos viewset"""
     queryset = Silos.objects.all()
     serializer_class = SilosSerializer
     http_method_names = ('get', 'post', 'patch', 'delete', 'put')
@@ -30,7 +31,8 @@ class SilosViewSet(viewsets.ModelViewSet):
 
     @action(url_path=r'actions/fill/(?P<percentage>\d+)', detail=True)
     def fill(self, request, pk=None, percentage=100):
-        silos = get_object_or_404(Silos, id=pk)
+        """Fill silos with percentage"""
+        silos = get_object_or_404(Silos, id=pk)  # Get silos by id or return 404
 
         logger.info(f"filling silos#{pk}")
 
@@ -48,6 +50,7 @@ class SilosViewSet(viewsets.ModelViewSet):
 
     @action(url_path=r'actions/empty/(?P<percentage>\d+)', detail=True)
     def empty(self, request, pk=None, percentage=0):
+        """Empty silos with percentage"""
         silos = get_object_or_404(Silos, id=pk)
 
         logger.info(f"emptying silos#{pk}")
@@ -66,6 +69,7 @@ class SilosViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, url_path='actions/idle')
     def idle(self, request, pk=None):
+        """Idle silos"""
         silos = get_object_or_404(Silos, id=pk)
 
         logger.info(f"idle silos#{pk}")
@@ -82,20 +86,25 @@ class SilosViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, url_path='actions/start_worker')
     def start_worker(self, request, pk=None):
+        """Start worker"""
         silos = get_object_or_404(Silos, id=pk)
 
         logger.info(f"starting worker#{pk}")
 
-        # mqtt publish start sim
+
         silos.status = True
         silos.save()
 
-        data = SilosSerializer(silos).data
+        data = SilosSerializer(silos).data  # Serialize silos
 
-        data['size'] = SizesSerializer(silos.size).data
-        data['liquid'] = LiquidsSerializer(silos.liquid).data
-        data['liquid']['properties'] = LiquidsPropertiesSerializer(silos.liquid.properties.all(), many=True).data
-        data['sensors'] = SensorsTypologySerializer(silos.sensors.all(), many=True).data
+        data['size'] = SizesSerializer(silos.size).data  # Serialize size
+        data['liquid'] = LiquidsSerializer(silos.liquid).data  # Serialize liquid
+
+        if silos.liquid:
+            data['liquid']['properties'] = LiquidsPropertiesSerializer(silos.liquid.properties.all(), many=True).data  # Serialize liquid properties
+        else:
+            data['liquid']['properties'] = []
+        data['sensors'] = SensorsTypologySerializer(silos.sensors.all(), many=True).data  # Serialize sensors
 
         #print(json.dumps(data))
 
@@ -106,6 +115,7 @@ class SilosViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, url_path='actions/stop_worker')
     def stop_worker(self, request, pk=None):
+        """Stop worker"""
         silos = get_object_or_404(Silos, id=pk)
 
         logger.info(f"stopping worker#{pk}")
@@ -125,6 +135,7 @@ class SilosViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, url_path='actions/kill')
     def kill_worker(self, request, pk=None):
+        """Kill worker"""
         silos = get_object_or_404(Silos, id=pk)
         
         logger.info(f"killing worker#{pk}")

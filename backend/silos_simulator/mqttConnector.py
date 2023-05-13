@@ -21,18 +21,20 @@ class MQTTConnector:
         self.client_id = str(uuid4())
 
     def on_connect(self, client, userdata, flags, rc):
+        """The callback for when the client receives a CONNACK response from the server."""
         self.connected = True
-        if rc == 0:
-            print("Connected to MQTT Broker!")  # Not being printed in output
-            if self.silos is not None:
+        if rc == 0:  # Connection successful
+            print("Connected")
+            if self.silos is not None:  # If we have a silos, subscribe to its topics
                 for topic in self.topics.subscribe:
                     self.client.subscribe(topic.substitute(silos_id=self.silos.id), qos=2)
-            else:
+            else:  # If we don't have a silos, subscribe to commands topics
                 self.client.subscribe(self.topics.subscribe.commands.substitute(silos_id="+"), qos=2)
-        else:
+        else:  # Connection failed
             print("Failed to connect, return code:", rc)
 
     def bootstrap_mqtt(self):
+        """Connects to the MQTT broker and subscribes to the topics"""
         self.client = paho.Client(client_id=self.client_id, clean_session=True)
         self.client.username_pw_set(username=username, password=password)
 

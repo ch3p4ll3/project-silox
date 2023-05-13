@@ -33,6 +33,27 @@ services:
     networks:
       - internal_network
 
+  ingester:
+    build: backend/ingester
+    restart: always
+    environment:
+      - SECRET_KEY=${DJANGO_TOKEN}
+      - INFLUXDB_TOKEN=${INFLUX_TOKEN}
+      - INFLUXDB_ORG=${INFLUX_ORG}
+      - INFLUXDB_BUCKET=${INFLUX_BUCKET}
+      - INFLUXDB_URL=${INFLUX_URL}
+      - MQTT_USER=${MQTT_USER}
+      - MQTT_PSW=${MQTT_PSW}
+      - MQTT_HOST=${MQTT_HOST}
+      - MQTT_PORT=${MQTT_PORT}
+      - MQTT_KEEP_ALIVE=${MQTT_KEEP_ALIVE}
+    depends_on:
+      - api
+    links:
+      - influxdb:influxdb
+    networks:
+      - internal_network
+
   influxdb:
     image: "influxdb:latest"
     restart: always

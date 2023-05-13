@@ -1,10 +1,10 @@
 from os import getenv
 
-DEBUG = getenv("DEBUG", 'true').lower() == 'true'
+DEBUG = getenv("DEBUG", 'true').lower() == 'true'  # If DEBUG is not set, default to True (development mode)
 
-if DEBUG:
+if DEBUG:  # If DEBUG is True, use the dev settings
     from .dev import *
-else:
+else:  # If DEBUG is False, use the production settings
     from .production import *
 
 
@@ -28,6 +28,7 @@ REST_FRAMEWORK = {
 }
 
 
+# MQTT Settings
 MQTT_USER = getenv("MQTT_USER")
 MQTT_PSW = getenv("MQTT_PSW")
 MQTT_HOST = getenv("MQTT_HOST", 'localhost')

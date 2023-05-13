@@ -16,6 +16,7 @@ class LogsViewSet(viewsets.ModelViewSet):
 
     @action(url_path=r'(?P<silos_id>\w+)/last/(?P<logs_number>\w+)', detail=False)
     def last_silos_log(self, request, silos_id, logs_number):
+        """Get last logs from silos"""
         silos = get_object_or_404(Silos, id=silos_id)
 
         last_log = Logs.get_by_silos(silos, int(logs_number))

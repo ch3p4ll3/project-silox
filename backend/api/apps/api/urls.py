@@ -7,7 +7,9 @@ from .views import PropertiesViewSet, LiquidsPropertiesViewSet, LiquidsViewSet, 
     SensorsInSilosViewSet, SizesViewSet, MeasureUnitsViewSet, SensorsTypologyViewSet, SensorsTypesViewSet
 
 
-router = routers.DefaultRouter()
+router = routers.DefaultRouter()  # DefaultRouter automatically creates the API root view for us
+
+# Register the viewsets with the router
 router.register('liquids', LiquidsViewSet)
 router.register('silos', SilosViewSet)
 router.register('logs', LogsViewSet)
