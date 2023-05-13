@@ -25,7 +25,7 @@ services:
       influxdb:
         condition: service_started
       emqx:
-        condition: service_started
+        condition: service_healthy
     links:
       - db:db
     volumes:
@@ -80,9 +80,15 @@ services:
       - "1883:1883"
       - "8083:8083"
     volumes:
+      - vol-emqx-root:/root
       - vol-emqx-data:/opt/emqx/data
       - vol-emqx-etc:/opt/emqx/etc
       - vol-emqx-log:/opt/emqx/log
+    healthcheck:
+      test: [ "CMD", "/opt/emqx/bin/emqx_ctl", "status" ]
+      interval: 5s
+      timeout: 25s
+      retries: 5
     networks:
       - internal_network
 
@@ -130,6 +136,7 @@ services:
 
 volumes:
   influxdb-storage:
+  vol-emqx-root:
   vol-emqx-data:
   vol-emqx-etc:
   vol-emqx-log:

@@ -11,5 +11,5 @@ python manage.py migrate
 
 # Start server
 echo "Starting server"
-python manage.py runserver 0.0.0.0:8080
-#gunicorn project_silos.wsgi:application --bind 0.0.0.0:8080
+#python manage.py runserver 0.0.0.0:8080
+gunicorn -c config/gunicorn/production.py
