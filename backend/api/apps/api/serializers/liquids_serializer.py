@@ -23,6 +23,24 @@ class LiquidsSerializer(serializers.ModelSerializer):
 
         return liquid_model
 
+    def update(self, instance: Liquids, validated_data):
+        properties = validated_data.get("properties")
+
+        if properties is not None:
+            properties = []
+
+            for property in validated_data.pop("properties", []):
+                obj, _ = LiquidProperties.objects.update_or_create(**property)
+                obj.save()
+                properties.append(obj)
+
+            instance.properties.set(properties)
+
+        for attr, val in validated_data.items():
+            setattr(instance, attr, val)
+        instance.save()
+        return instance
+
     class Meta:
         model = Liquids
         fields = '__all__'

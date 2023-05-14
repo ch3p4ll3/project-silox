@@ -3,8 +3,8 @@ from ..models import LiquidProperties
 from .properties_serializer import PropertiesSerializer
 
 
-class LiquidsPropertiesSerializer(serializers.ModelSerializer):
-    #property = PropertiesSerializer(read_only=True)
+class LiquidsPropertiesSerializerGet(serializers.ModelSerializer):
+    property = PropertiesSerializer(read_only=True)
 
     class Meta:
         model = LiquidProperties
