@@ -2,7 +2,7 @@ version: "3"
 services:
   api:
     build: backend/api
-    restart: always
+    restart: unless-stopped
     ports:
       - "8080:8080"
     environment:
@@ -35,7 +35,7 @@ services:
 
   ingester:
     build: backend/ingester
-    restart: always
+    restart: unless-stopped
     environment:
       - SECRET_KEY=${DJANGO_TOKEN}
       - INFLUXDB_TOKEN=${INFLUX_TOKEN}
@@ -51,6 +51,20 @@ services:
       - api
     links:
       - influxdb:influxdb
+    networks:
+      - internal_network
+
+  simulator:
+    build: backend/silos_simulator
+    restart: unless-stopped
+    environment:
+      - MQTT_USER=${MQTT_USER}
+      - MQTT_PSW=${MQTT_PSW}
+      - MQTT_HOST=${MQTT_HOST}
+      - MQTT_PORT=${MQTT_PORT}
+      - MQTT_KEEP_ALIVE=${MQTT_KEEP_ALIVE}
+    depends_on:
+      - api
     networks:
       - internal_network
 
@@ -74,7 +88,7 @@ services:
 
   emqx:
     image: "emqx:latest"
-    restart: always
+    restart: unless-stopped
     ports:
       - "18083:18083"
       - "1883:1883"
@@ -94,7 +108,7 @@ services:
 
   nginx:
     image: "nginx:latest"
-    restart: always
+    restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
@@ -116,7 +130,7 @@ services:
 
   db:
     image: "postgres:13.4-alpine"
-    restart: always
+    restart: unless-stopped
     container_name: db
     volumes:
       - postgres_data:/var/lib/postgresql/data/

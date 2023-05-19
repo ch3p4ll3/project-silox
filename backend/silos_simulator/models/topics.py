@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from string import Template
 
 
@@ -26,5 +26,5 @@ class SubscribeTopics:
 @dataclass
 class Topics:
     """Topics for the simulator to publish and subscribe to."""
-    publish: PublishTopics = PublishTopics()
-    subscribe: SubscribeTopics = SubscribeTopics()
+    publish: PublishTopics = field(default_factory=PublishTopics)
+    subscribe: SubscribeTopics = field(default_factory=SubscribeTopics)
