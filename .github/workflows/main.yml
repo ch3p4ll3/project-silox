@@ -1,5 +1,8 @@
 name: test_Django
 on: [pull_request, push] # activates the workflow when there is a push or pull request in the repo
+env:
+  # Setting an environment variable with the value of a configuration variable
+  env_var: ${{ vars.SECRET_KEY }}
 jobs:
   test_backend:
     runs-on: ubuntu-latest # operating system your code will run on
@@ -12,4 +15,8 @@ jobs:
       - run: pip install flake8
       - run: pip install -r requirements.txt # install all our dependencies for the project
       - run: python manage.py test apps.api . # run pytest test
+        env:
+          MQTT_HOST: ${{ vars.MQTT_HOST }}
+          SECRET_KEY: ${{ vars.SECRET_KEY }}
+          DEBUG: ${{ vars.DEBUG }}
       - run: flake8 . # run flake8 test
