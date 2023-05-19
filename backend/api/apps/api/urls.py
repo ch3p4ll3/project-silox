@@ -24,5 +24,5 @@ router.register('sensors_typology', SensorsTypologyViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('auth/', obtain_auth_token)
+    path('auth/', obtain_auth_token, name='auth_login')
 ]
