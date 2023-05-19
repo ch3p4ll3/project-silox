@@ -3,10 +3,12 @@ on: [pull_request, push] # activates the workflow when there is a push or pull r
 jobs:
   test_backend:
     runs-on: ubuntu-latest # operating system your code will run on
+    defaults:
+      run:
+        working-directory: backend/api # cd to backend/api directory
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
-      - run: cd backend/api
       - run: pip install flake8
       - run: pip install -r requirements.txt # install all our dependencies for the project
       - run: python manage.py apps.api . # run pytest test
