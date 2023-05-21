@@ -1,8 +1,5 @@
 from rest_framework import serializers
-from ..models import Silos, Sizes
-from .liquids_serializer import LiquidsSerializer
-from .size_serializer import SizesSerializer
-from .sensors_in_silos_serializer import SensorsInSilosSerializer
+from ..models import Silos
 
 
 class SilosSerializer(serializers.ModelSerializer):

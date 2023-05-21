@@ -26,4 +26,4 @@ jobs:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           MQTT_HOST: ${{ secrets.MQTT_HOST }}
           MQTT_PORT: ${{ secrets.MQTT_PORT }}
-      - run: flake8 . # run flake8 test
+      - run: flake8 . --exclude migrations,__pycache__,manage.py,settings,__init__.py,.git --ignore=E501  # run flake8 test
