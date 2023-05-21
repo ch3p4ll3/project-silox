@@ -106,27 +106,20 @@ services:
     networks:
       - internal_network
 
-  nginx:
-    image: "nginx:latest"
+  proxy_manager:
+    image: 'jc21/nginx-proxy-manager:latest'
     restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
     depends_on:
       - api
+    ports:
+      - '80:80' # Public HTTP Port
+      - '443:443' # Public HTTPS Port
+      - '81:81' # Admin Web Port
     volumes:
-      - ./nginx_configs:/etc/nginx/conf.d/
-      - static_volume:/app/static  # <-- bind the static volume
-      - ./certbot/www:/var/www/certbot/:ro
-      - ./certbot/conf/:/etc/nginx/ssl/:ro
+      - proxy_manager_data:/data
+      - proxy_manager_letsencrypt:/etc/letsencrypt
     networks:
       - internal_network
-
-  certbot:
-    image: "certbot/certbot:latest"
-    volumes:
-      - ./certbot/www/:/var/www/certbot/:rw
-      - ./certbot/conf/:/etc/letsencrypt/:rw
 
   db:
     image: "postgres:13.4-alpine"
@@ -156,6 +149,8 @@ volumes:
   vol-emqx-log:
   static_volume:
   postgres_data:
+  proxy_manager_data:
+  proxy_manager_letsencrypt:
 
 networks:
   internal_network:
