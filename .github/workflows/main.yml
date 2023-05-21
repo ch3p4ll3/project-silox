@@ -22,11 +22,11 @@ jobs:
           echo "$SECRET_KEY"
         env: # set environment variables
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          MQTT_HOST: ${{ vars.MQTT_HOST }}
-          MQTT_PORT: ${{ vars.MQTT_PORT }}
+          MQTT_HOST: ${{ secrets.MQTT_HOST }}
+          MQTT_PORT: ${{ secrets.MQTT_PORT }}
       - run: python manage.py test apps.api . # run pytest test
         env: # set environment variables
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          MQTT_HOST: ${{ vars.MQTT_HOST }}
-          MQTT_PORT: ${{ vars.MQTT_PORT }}
+          MQTT_HOST: ${{ secrets.MQTT_HOST }}
+          MQTT_PORT: ${{ secrets.MQTT_PORT }}
       - run: flake8 . # run flake8 test
