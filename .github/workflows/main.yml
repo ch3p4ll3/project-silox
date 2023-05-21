@@ -17,13 +17,7 @@ jobs:
       - run: pip install flake8
       - run: pip install -r requirements.txt # install all our dependencies for the project
       - run: |
-          echo "$MQTT_HOST"
-          echo "$MQTT_PORT"
-          echo "$SECRET_KEY"
-        env: # set environment variables
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          MQTT_HOST: ${{ secrets.MQTT_HOST }}
-          MQTT_PORT: ${{ secrets.MQTT_PORT }}
+          echo pwd
       - run: python manage.py test apps.api . # run pytest test
         env: # set environment variables
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
