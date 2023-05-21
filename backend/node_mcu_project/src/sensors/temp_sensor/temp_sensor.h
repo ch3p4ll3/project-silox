@@ -1,13 +1,13 @@
 #include "../ISensorsInterface.h"
 #include <Arduino.h>
-#include <TMP36.h>
+#include "DHT.h"
 
 
 class TempSensor : public ISensorsInterface{
     private:
-        TMP36* temp_sensor;
+        DHT* temp_sensor;
 
     public:
-        TempSensor(String name, String slug, int silosId, TMP36* temp_sensor);
+        TempSensor(String name, String slug, int silosId, DHT* temp_sensor);
         String toJson();
 };

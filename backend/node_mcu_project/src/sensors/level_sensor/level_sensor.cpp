@@ -1,23 +1,27 @@
 #include "level_sensor.h"
 #include <Arduino.h>
-#include <TMP36.h>
+#include "Adafruit_VL53L0X.h"
 
 
-LevelSensor::LevelSensor(String name, String slug, int silosId, int sensor_pin){
+LevelSensor::LevelSensor(String name, String slug, int silosId, int max_level, Adafruit_VL53L0X* lox){
     this->slug = slug;
     this->name = name;
     this->silosId = silosId;
-    this->sensor_pin = sensor_pin;
+    this->lox = lox;
+    this->max_level = max_level;
 }
 
-double LevelSensor::getValue(){
-    this->value = map(analogRead(sensor_pin), 0, 4095, 0, 100);
+double LevelSensor::getValue(){    
+    while (!lox -> isRangeComplete()) {
+    }
+
+    this->value = lox -> readRange() - this->max_level;
 
     return this->value;
 }
 
 String LevelSensor::toJson(){
-    this->value = map(analogRead(sensor_pin), 0, 4095, 0, 100);
+    this->value = this->getValue();
 
     return ISensorsInterface::toJson();
 }
