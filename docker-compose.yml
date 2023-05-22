@@ -101,7 +101,7 @@ services:
     healthcheck:
       test: [ "CMD", "/opt/emqx/bin/emqx_ctl", "status" ]
       interval: 5s
-      timeout: 25s
+      timeout: 5s
       retries: 5
     networks:
       - internal_network
@@ -118,6 +118,7 @@ services:
     volumes:
       - proxy_manager_data:/data
       - proxy_manager_letsencrypt:/etc/letsencrypt
+      - ./backend/api/www-data/static:/api/static
     networks:
       - internal_network
 
