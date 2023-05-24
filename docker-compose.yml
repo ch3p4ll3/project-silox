@@ -29,7 +29,7 @@ services:
     links:
       - db:db
     volumes:
-      - static_volume:/app/static
+      - static_volume:/app/www-data/static
     networks:
       - internal_network
 
