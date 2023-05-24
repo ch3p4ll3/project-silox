@@ -24,6 +24,7 @@ SECRET_KEY = getenv('SECRET_KEY')
 
 ALLOWED_HOSTS = ['api.projectsilox.ml', 'localhost', '127.0.0.1']
 CSRF_TRUSTED_ORIGINS = ['https://api.projectsilox.ml', 'http://localhost', 'http://127.0.0.1']
+CORS_ALLOWED_ORIGINS = ['https://api.projectsilox.ml', 'http://localhost']
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -35,8 +36,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware'
 ]
-
-CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'project_silos.urls'
 

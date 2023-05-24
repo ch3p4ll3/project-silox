@@ -118,7 +118,7 @@ services:
     volumes:
       - proxy_manager_data:/data
       - proxy_manager_letsencrypt:/etc/letsencrypt
-      - ./backend/api/www-data/static:/api/static
+      - static_volume:/api/static
     networks:
       - internal_network
 
