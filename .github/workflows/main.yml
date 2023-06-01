@@ -1,0 +1,26 @@
+name: test_Django
+on: [pull_request, push] # activates the workflow when there is a push or pull request in the repo
+
+jobs:
+  test_backend:
+    runs-on: ubuntu-latest # operating system your code will run on
+    defaults:
+      run:
+        working-directory: backend/api # cd to backend/api directory
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - run: pip install flake8
+      - run: pip install -r requirements.txt # install all our dependencies for the project
+      - run: python manage.py migrate # run migrations
+        env: # set environment variables
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          MQTT_HOST: ${{ secrets.MQTT_HOST }}
+          MQTT_PORT: ${{ secrets.MQTT_PORT }}
+      - run: python manage.py test apps.api  # run pytest test
+        env: # set environment variables
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          MQTT_HOST: ${{ secrets.MQTT_HOST }}
+          MQTT_PORT: ${{ secrets.MQTT_PORT }}
+      - run: flake8 . --exclude migrations,__pycache__,manage.py,settings,__init__.py,.git --ignore=E501  # run flake8 test

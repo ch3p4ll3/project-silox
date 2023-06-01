@@ -1,0 +1,158 @@
+version: "3"
+services:
+  api:
+    build: backend/api
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - SECRET_KEY=${DJANGO_TOKEN}
+      - INFLUXDB_TOKEN=${INFLUX_TOKEN}
+      - INFLUXDB_ORG=${INFLUX_ORG}
+      - INFLUXDB_BUCKET=${INFLUX_BUCKET}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - MQTT_USER=${MQTT_USER}
+      - MQTT_PSW=${MQTT_PSW}
+      - MQTT_HOST=${MQTT_HOST}
+      - MQTT_PORT=${MQTT_PORT}
+      - MQTT_KEEP_ALIVE=${MQTT_KEEP_ALIVE}
+      - DEBUG=${DEBUG}
+    depends_on:
+      db:
+        condition: service_healthy
+      influxdb:
+        condition: service_started
+      emqx:
+        condition: service_healthy
+    links:
+      - db:db
+    volumes:
+      - static_volume:/app/www-data/static
+    networks:
+      - internal_network
+
+  ingester:
+    build: backend/ingester
+    restart: unless-stopped
+    environment:
+      - SECRET_KEY=${DJANGO_TOKEN}
+      - INFLUXDB_TOKEN=${INFLUX_TOKEN}
+      - INFLUXDB_ORG=${INFLUX_ORG}
+      - INFLUXDB_BUCKET=${INFLUX_BUCKET}
+      - INFLUXDB_URL=${INFLUX_URL}
+      - MQTT_USER=${MQTT_USER}
+      - MQTT_PSW=${MQTT_PSW}
+      - MQTT_HOST=${MQTT_HOST}
+      - MQTT_PORT=${MQTT_PORT}
+      - MQTT_KEEP_ALIVE=${MQTT_KEEP_ALIVE}
+    depends_on:
+      - api
+    links:
+      - influxdb:influxdb
+    networks:
+      - internal_network
+
+  simulator:
+    build: backend/silos_simulator
+    restart: unless-stopped
+    environment:
+      - MQTT_USER=${MQTT_USER}
+      - MQTT_PSW=${MQTT_PSW}
+      - MQTT_HOST=${MQTT_HOST}
+      - MQTT_PORT=${MQTT_PORT}
+      - MQTT_KEEP_ALIVE=${MQTT_KEEP_ALIVE}
+    depends_on:
+      - api
+    networks:
+      - internal_network
+
+  influxdb:
+    image: "influxdb:latest"
+    restart: always
+    volumes:
+      - influxdb-storage:/var/lib/influxdb2
+    ports:
+      - "8086:8086"
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUX_USERNAME}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUX_PSW}
+      - DOCKER_INFLUXDB_INIT_ORG=${INFLUX_ORG}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUX_BUCKET}
+      - DOCKER_INFLUXDB_INIT_RETENTION=1w
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUX_TOKEN}
+    networks:
+      - internal_network
+
+  emqx:
+    image: "emqx:latest"
+    restart: unless-stopped
+    ports:
+      - "18083:18083"
+      - "1883:1883"
+      - "8083:8083"
+    volumes:
+      - vol-emqx-root:/root
+      - vol-emqx-data:/opt/emqx/data
+      - vol-emqx-etc:/opt/emqx/etc
+      - vol-emqx-log:/opt/emqx/log
+    healthcheck:
+      test: [ "CMD", "/opt/emqx/bin/emqx_ctl", "status" ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks:
+      - internal_network
+
+  proxy_manager:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - '80:80' # Public HTTP Port
+      - '443:443' # Public HTTPS Port
+      - '81:81' # Admin Web Port
+    volumes:
+      - proxy_manager_data:/data
+      - proxy_manager_letsencrypt:/etc/letsencrypt
+      - static_volume:/api/static
+    networks:
+      - internal_network
+
+  db:
+    image: "postgres:13.4-alpine"
+    restart: unless-stopped
+    container_name: db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
+      interval: 1s
+      timeout: 1s
+      retries: 10
+    ports:
+      - "5432:5432"
+    networks:
+      - internal_network
+
+volumes:
+  influxdb-storage:
+  vol-emqx-root:
+  vol-emqx-data:
+  vol-emqx-etc:
+  vol-emqx-log:
+  static_volume:
+  postgres_data:
+  proxy_manager_data:
+  proxy_manager_letsencrypt:
+
+networks:
+  internal_network:
+    driver: bridge
