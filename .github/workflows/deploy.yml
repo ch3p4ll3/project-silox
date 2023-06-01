@@ -46,4 +46,4 @@ jobs:
             cd project-work-tantitank
             git pull
             git checkout ${{ secrets.BRANCH_NAME }}
-            docker-compose up -d --build
+            docker-compose --env-file .env up -d --build
