@@ -1,5 +1,9 @@
-name: test_Django
-on: [pull_request, push] # activates the workflow when there is a push or pull request in the repo
+name: build_project
+on:
+  pull_request:
+    types: closed
+    branches:
+      - master
 
 jobs:
   test_backend:
@@ -24,3 +28,22 @@ jobs:
           MQTT_HOST: ${{ secrets.MQTT_HOST }}
           MQTT_PORT: ${{ secrets.MQTT_PORT }}
       - run: flake8 . --exclude migrations,__pycache__,manage.py,settings,__init__.py,.git --ignore=E501  # run flake8 test
+
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend/api # cd to backend/api directory
+
+    steps:
+      - name: multiple command
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd project-work-tantitank
+            git pull
+            git checkout ${{ secrets.BRANCH_NAME }}
+            docker-compose up -d --build
