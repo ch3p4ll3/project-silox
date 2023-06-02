@@ -48,6 +48,6 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd project-work-tantitank
+            git checkout main
             git pull
-            git checkout ${{ secrets.BRANCH_NAME }}
             docker-compose --env-file .env up -d --build
