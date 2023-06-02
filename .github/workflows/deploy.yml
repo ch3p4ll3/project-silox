@@ -3,11 +3,11 @@ on:
   pull_request:
     types: closed
     branches:
-      - master
+      - main
 
   push:
     branches:
-      - master
+      - main
 
 jobs:
   test_backend:
