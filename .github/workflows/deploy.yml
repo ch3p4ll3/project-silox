@@ -5,6 +5,10 @@ on:
     branches:
       - master
 
+  push:
+    branches:
+      - master
+
 jobs:
   test_backend:
     runs-on: ubuntu-latest # operating system your code will run on
@@ -46,4 +50,4 @@ jobs:
             cd project-work-tantitank
             git pull
             git checkout ${{ secrets.BRANCH_NAME }}
-            docker-compose up -d --build
+            docker-compose --env-file .env up -d --build

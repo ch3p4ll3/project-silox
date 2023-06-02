@@ -19,6 +19,7 @@ services:
       - MQTT_PORT=${MQTT_PORT}
       - MQTT_KEEP_ALIVE=${MQTT_KEEP_ALIVE}
       - DEBUG=${DEBUG}
+      - SENTRY_DSN=${SENTRY_DSN}
     depends_on:
       db:
         condition: service_healthy
@@ -83,6 +84,7 @@ services:
       - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUX_BUCKET}
       - DOCKER_INFLUXDB_INIT_RETENTION=1w
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUX_TOKEN}
+
     networks:
       - internal_network
 
