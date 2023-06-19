@@ -36,15 +36,26 @@ INSTALLED_APPS = [
     'apps.api',
     'corsheaders',
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'drf_spectacular'
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated'
-    ]
+    ],
+
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
 }
 
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Project Silox API',
+    'DESCRIPTION': 'Project Silox APIs for Frontend',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}
 
 # MQTT Settings
 MQTT_USER = getenv("MQTT_USER")
