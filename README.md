@@ -1,4 +1,9 @@
-# Tantitank #
+![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-lightgrey.svg) ![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg) ![Django 4.2](https://img.shields.io/badge/django-4.2-blue.svg) ![Docker](https://img.shields.io/badge/docker-yes-blue.svg) ![Docker](https://img.shields.io/badge/docker-compose-yes.svg)
+
+# Tantitank
+
+## LICENSE
+The project is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/.
 
 ## CONTESTO ##
 SiouxSilos Itd. è un'azienda che produce sistemi industriali di stoccaggio di materiali sfusi e liquidi. Ci commissiona la progettazione e la realizzazione di una soluzione atta al monitoraggio e gestione del livello dei materiali contenuti nei silos di un impianto industriale realizzato nel Nord Dakota. Ciascun serbatoio è dotato di 8 sensori (S) posizionati sul lato interno della cisterna alla distanza di 1 mt ciascuno. All'esterno, ad un metro dalla base ed alla sommità, sono collocati un sensore di umidità ed uno di temperatura. I serbatoi sono sette in totale, suddivisi in due blocchi di 3 e 4, collocati in due aree dello stabilimento distanti circa 150 metri una dall'altra. 
