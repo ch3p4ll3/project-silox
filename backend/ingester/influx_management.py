@@ -27,7 +27,7 @@ class InfluxDb:
         """
 
         time = data.pop('time')
-        value = data.pop('value')
+        value = data.pop('value', 0)
         name = data.pop('name')
 
         # Write data to InfluxDB using the Point structure
