@@ -23,8 +23,7 @@ class SubscribeTopics:
         return iter([self.fill, self.empty, self.idle, self.kill, self.stop_simulation, self.start_simulation])
 
 
-@dataclass
 class Topics:
     """Topics for the simulator to publish and subscribe to."""
-    publish: PublishTopics = field(default_factory=PublishTopics)
-    subscribe: SubscribeTopics = field(default_factory=SubscribeTopics)
+    publish: PublishTopics = PublishTopics()
+    subscribe: SubscribeTopics = SubscribeTopics()
