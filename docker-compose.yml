@@ -50,6 +50,7 @@ services:
       - MQTT_KEEP_ALIVE=${MQTT_KEEP_ALIVE}
     depends_on:
       - api
+      - emqx
     links:
       - influxdb:influxdb
     networks:
@@ -66,6 +67,7 @@ services:
       - MQTT_KEEP_ALIVE=${MQTT_KEEP_ALIVE}
     depends_on:
       - api
+      - emqx
     networks:
       - internal_network
 
