@@ -23,6 +23,7 @@ class Pump{
 
         void loop();
         void begin();
+        void callback();
 
         bool is_running();
 
