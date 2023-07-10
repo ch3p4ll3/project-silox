@@ -40,6 +40,8 @@ HumiditySensor humidity_sensor("Humidity Sensor", "humidity_sensor", SILOS_ID, &
 
 Pump pump(SILOS_HEIGHT - MAX_LEVEL, &level_sensor, PUMP_FW_PIN, PUMP_RW_PIN);
 
+void callback();
+
 ISensorsInterface* sensors[MAX_SENSORS] = {
   &temp_sensor,
   &humidity_sensor,
@@ -67,18 +69,20 @@ typedef struct {
 //Declare a default configuration_t to use
 configuration_t CONFIGURATION = {
   false,
-  "TestClient",
-  "5G COVID-19 TEST",
-  "30Matvid11!",
-  "10.188.26.101",
+  "<nodename>",
+  "<ssid>",
+  "<password>",
+  "<mqttip>",
   1883,
-  "",
-  ""
+  "<mqttuser>",
+  "<mqttpass>"
 };
 
 void setup()
 {
   Serial.begin(115200);
+
+  touchAttachInterrupt(15, callback, 11);
 
   pump.begin();
   dht.begin();
@@ -97,6 +101,10 @@ void setup()
   client.setMqttServer(CONFIGURATION.mqttip, CONFIGURATION.mqttuser, CONFIGURATION.mqttpass, CONFIGURATION.mqttport);
 
   lox.startRangeContinuous();
+}
+
+void callback(){
+  pump.callback();
 }
 
 // This function is called once everything is connected (Wifi and MQTT)

@@ -19,7 +19,7 @@ void Pump::loop(){
     double current_percentage = get_silos_percentage();
 
     if (!is_idle){
-        if ((is_fill && current_percentage < target_percentage) && touchRead(15) >= 11){ //fill
+        if ((is_fill && current_percentage < target_percentage)){ //fill
             digitalWrite(pump_fw_pin, HIGH);
             digitalWrite(pump_rw_pin, LOW);
         }
@@ -33,6 +33,10 @@ void Pump::loop(){
             idle();
         }
     }
+}
+
+void Pump::callback(){
+    this -> is_fill = false;
 }
 
 void Pump::fill(double percentage){
@@ -60,8 +64,9 @@ bool Pump::is_running(){
 double Pump::get_silos_percentage(){  // fix me
     this->raw_reading = this->level_sensor->getValue();
 
-    if (this -> raw_reading == -999.0){
+    if (this -> raw_reading == 65485){
         idle();
+        return 0;
     }
 
     return ((this -> silos_height - this->raw_reading) / this->silos_height) * 100;

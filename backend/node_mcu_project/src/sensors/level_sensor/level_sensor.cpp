@@ -11,8 +11,11 @@ LevelSensor::LevelSensor(String name, String slug, int silosId, int max_level, A
     this->max_level = max_level;
 }
 
-double LevelSensor::getValue(){    
+double LevelSensor::getValue(){
     while (!lox -> isRangeComplete()) {
+        if (lox -> Status != 0){
+            return -999;
+        }
     }
 
     this->value = lox -> readRange() - this->max_level;
