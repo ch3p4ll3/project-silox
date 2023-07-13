@@ -1,0 +1,22 @@
+# Project Silox
+![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-lightgrey.svg) ![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg) ![Django 4.2](https://img.shields.io/badge/django-4.2-blue.svg) ![Docker](https://img.shields.io/badge/docker-yes-blue.svg) ![Docker](https://img.shields.io/badge/docker-compose-yes.svg)
+
+## License
+The project is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License. 
+To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/.
+
+## Context
+SiouxSilos Itd. is a company that manufactures industrial bulk and liquid materials storage systems. 
+It commissioned us to design and implement a solution suitable for monitoring and managing the level of 
+materials contained in the silos of an industrial plant built in North Dakota. 
+
+Each tank is equipped with 8 sensors (S) positioned on the inner side of the tank at the distance of 1 m each. 
+On the outside, one meter from the base and at the top, one humidity sensor and one temperature sensor are placed. 
+There are seven tanks in total, divided into two blocks of 3 and 4, 
+located in two areas of the plant about 150 meters apart. 
+
+The solution should be able to: 
+* acquire, through a PLC, the data detected by the sensors, calculating the quantities of material present in the silos, displaying the most relevant data in a display; 
+* provide an alarm if the tank level exceeds the lower and upper reference thresholds;
+* manage, again through PLC, a shutter for loading/emptying silos; 
+* send data to cloud, through a gateway, handling situations of absence or loss of internet connectivity, and showing data trends in graphical form with a web page.
