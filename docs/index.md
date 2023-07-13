@@ -20,3 +20,7 @@ The solution should be able to:
 * provide an alarm if the tank level exceeds the lower and upper reference thresholds;
 * manage, again through PLC, a shutter for loading/emptying silos; 
 * send data to cloud, through a gateway, handling situations of absence or loss of internet connectivity, and showing data trends in graphical form with a web page.
+
+## How to start the project
+To start the project you need to have docker and docker-compose installed on your machine.
+Then you need to run `docker-compose --env-file .env up --build`

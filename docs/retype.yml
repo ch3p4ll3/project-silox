@@ -4,6 +4,8 @@ url: # Add your website address here
 branding:
   title: Project Silox
   label: Docs
+  logo: /images/logo.png
+  favicon: /images/logo.png
 links:
 - text: Swagger API
   link: https://api.projectsilox.ml/schema/swagger-ui/
