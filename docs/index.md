@@ -21,6 +21,14 @@ The solution should be able to:
 * manage, again through PLC, a shutter for loading/emptying silos; 
 * send data to cloud, through a gateway, handling situations of absence or loss of internet connectivity, and showing data trends in graphical form with a web page.
 
+## What we did
+We have developed a solution that consists of three main modules:
+* REST API: it is a Django application that allows you to manage the database and run the simulators.
+* Simulator: it is a python script that simulates the data sent by the sensors.
+* Ingester: it is a python script that subscribes to the MQTT broker and saves the data in the influxdb database.
+
+All the modules work autonomously and communicate with each other through the MQTT protocol. In this way, it is possible to simulate the data and send them to the database without having to use the PLC.
+
 ## How to start the project
 To start the project you need to have docker and docker-compose installed on your machine.
 Then you need to run `docker-compose --env-file .env up --build`
