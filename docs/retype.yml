@@ -1,6 +1,6 @@
 input: .
 output: .retype
-url: https://docs.projectsilox.ml # Add your website address here
+url: https://docs.projectsilox.cfd # Add your website address here
 branding:
   title: Project Silox
   label: Docs
@@ -8,11 +8,16 @@ branding:
 favicon: /images/logo.png
 links:
 - text: Swagger API
-  link: https://api.projectsilox.ml/schema/swagger-ui/
+  link: https://api.projectsilox.cfd/schema/swagger-ui/
   target: _blank
 
 - text: Redoc API
-  link: https://api.projectsilox.ml/schema/redoc/
+  link: https://api.projectsilox.cfd/schema/redoc/
   target: _blank
+
+- text: Github
+  link: https://github.com/ch3p4ll3/project-silox
+  target: _blank
+
 footer:
   copyright: "&copy; Copyright {{ year }}. All rights reserved."
